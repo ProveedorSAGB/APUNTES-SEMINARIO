@@ -230,20 +230,69 @@
       transform: rotate(45deg) translateY(50%);
     }
 
-    .feature-card img {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 1.5rem;
-      filter: drop-shadow(0 0 10px rgba(78, 255, 182, 0.3));
+    .diapo-container {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      margin: 3rem 0;
     }
 
-    .content-card {
+    .flip-card {
+      width: 300px;
+      height: 400px;
+      perspective: 1000px;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+
+    .flip-card-front {
+      background: var(--card);
+      border: 1px solid var(--border);
+    }
+
+    .flip-card-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .flip-card-back {
+      background: var(--glass);
+      transform: rotateY(180deg);
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 1px solid var(--primary);
+    }
+
+    .diapo-text {
+      flex: 1;
       background: var(--card);
       padding: 2rem;
       border-radius: 1rem;
       border: 1px solid var(--border);
-      margin: 2rem auto;
-      max-width: 800px;
     }
 
     footer {
@@ -265,6 +314,15 @@
       
       .features-grid {
         grid-template-columns: 1fr;
+      }
+      
+      .diapo-container {
+        flex-direction: column;
+      }
+      
+      .flip-card {
+        width: 100%;
+        height: 300px;
       }
     }
   </style>
@@ -350,23 +408,65 @@
   </section>
 
   <section id="diapositiva1">
-    <div class="content-card">
-      <h2 class="section-title">Diapositiva 1: Fundamentos Arcanos</h2>
-      <p>Descubre los principios básicos de la energía digital y su manipulación mediante interfaces mágicas.</p>
+    <h2 class="section-title">Diapositiva 1: Fundamentos Arcanos</h2>
+    <div class="diapo-container">
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <img src="https://source.unsplash.com/random/600x800/?tech,code" alt="Fundamentos">
+          </div>
+          <div class="flip-card-back">
+            <h3>Principios Esenciales</h3>
+            <p>Domina las bases de la energía digital y su manipulación cuántica</p>
+          </div>
+        </div>
+      </div>
+      <div class="diapo-text">
+        <h3>Introducción a la Tecnomagia</h3>
+        <p>Descubre los fundamentos que conectan el mundo digital con las fuerzas arcanas ancestrales. Aprende a canalizar la energía a través de interfaces místicas y componentes electrónicos.</p>
+      </div>
     </div>
   </section>
 
   <section id="diapositiva2">
-    <div class="content-card">
-      <h2 class="section-title">Diapositiva 2: Componentes Mágicos</h2>
-      <p>Domina los elementos esenciales de todo hechizo digital: HTML5, CSS3 y JavaScript ES6+.</p>
+    <h2 class="section-title">Diapositiva 2: Componentes Mágicos</h2>
+    <div class="diapo-container">
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <img src="https://source.unsplash.com/random/600x800/?circuit,tech" alt="Componentes">
+          </div>
+          <div class="flip-card-back">
+            <h3>Elementos Clave</h3>
+            <p>HTML5, CSS3 y JavaScript: Los pilares de la creación digital</p>
+          </div>
+        </div>
+      </div>
+      <div class="diapo-text">
+        <h3>Arquitectura Arcana</h3>
+        <p>Desentraña los misterios de los lenguajes sagrados de la web. Domina la alquimia de estilos y la invocación de funciones místicas para crear hechizos interactivos.</p>
+      </div>
     </div>
   </section>
 
   <section id="diapositiva3">
-    <div class="content-card">
-      <h2 class="section-title">Diapositiva 3: Flujos de Energía</h2>
-      <p>Aprende a canalizar la energía digital a través de arquitecturas limpias y patrones de diseño místicos.</p>
+    <h2 class="section-title">Diapositiva 3: Flujos de Energía</h2>
+    <div class="diapo-container">
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <img src="https://source.unsplash.com/random/600x800/?data,network" alt="Flujos">
+          </div>
+          <div class="flip-card-back">
+            <h3>Circulación Cuántica</h3>
+            <p>Controla el flujo de datos a través de algoritmos místicos</p>
+          </div>
+        </div>
+      </div>
+      <div class="diapo-text">
+        <h3>Dinámica Energética</h3>
+        <p>Aprende a manipular los flujos de información cuántica mediante arquitecturas limpias y patrones de diseño ancestrales. Domina el arte de la optimización energética.</p>
+      </div>
     </div>
   </section>
 
