@@ -522,7 +522,7 @@
         const text = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.93) {
           drops[i] = 0;
         }
         drops[i]++;
