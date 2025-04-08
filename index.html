@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <!-- Configuración para responsividad en dispositivos móviles -->
+  <!-- Configuración para que la página se adapte a dispositivos móviles -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <!-- Título de la página -->
   <title>GrimorioTech - Curso Mágico</title>
@@ -10,24 +10,24 @@
   <style>
     /* ------------------------------------------------------------------
        Variables CSS:
-       Definición de variables para colores, fondos, bordes y gradientes.
-       Así es más fácil modificar la apariencia de toda la página.
+       Se definen variables para colores, fondos, bordes y gradientes.
+       Estos valores se usarán en todo el documento para mantener la coherencia.
     ---------------------------------------------------------------------*/
     :root {
       --primary: #4effb6; /* Color primario, tono verde brillante */
       --background: #121212; /* Fondo general oscuro */
-      --card: rgba(255, 255, 255, 0.05); /* Fondo de tarjetas, poco opaco */
-      --glass: rgba(255, 255, 255, 0.07); /* Fondo con efecto "vidrio" para contenedores */
-      --border: rgba(255, 255, 255, 0.2); /* Color de bordes sutil */
-      --text: #f0f0f0; /* Color principal del texto */
-      --accent: #15f5c0; /* Color de acento para hover y resaltados */
-      --magic-gradient: linear-gradient(45deg, #4effb6 0%, #15f5c0 100%); /* Gradiente mágico para efectos */
+      --card: rgba(255, 255, 255, 0.05); /* Fondo de tarjetas (anteriormente) */
+      --glass: rgba(255, 255, 255, 0.07); /* Fondo tipo vidrio para cuadros de información */
+      --border: rgba(255, 255, 255, 0.2); /* Color de borde sutil */
+      --text: #f0f0f0; /* Color del texto principal */
+      --accent: #15f5c0; /* Color de acento para elementos destacados */
+      --magic-gradient: linear-gradient(45deg, #4effb6 0%, #15f5c0 100%); /* Gradiente mágico para efectos visuales */
     }
 
     /* ------------------------------------------------------------------
        Reset global:
-       Se eliminan márgenes y paddings, se define el comportamiento de scroll
-       y se establece la fuente predeterminada para una apariencia uniforme.
+       Se eliminan márgenes y paddings para todos los elementos, se establece
+       el comportamiento de scroll suave y se define la fuente predeterminada.
     ---------------------------------------------------------------------*/
     * {
       margin: 0;
@@ -39,8 +39,8 @@
 
     /* ------------------------------------------------------------------
        Estilos generales para el body:
-       Se define el fondo, color de texto, y se posiciona de forma relativa
-       para poder manejar elementos posicionados sobre él (como el canvas Matrix).
+       Se establece el fondo, color de texto y se posiciona el body de forma
+       relativa para poder colocar elementos fijos (como el canvas Matrix) detrás.
     ---------------------------------------------------------------------*/
     body {
       background-color: var(--background);
@@ -51,23 +51,24 @@
     }
 
     /* ------------------------------------------------------------------
-       Canvas para efecto Matrix:
-       Se posiciona de forma fija para cubrir toda la ventana, con un
-       z-index negativo para que quede detrás de todos los contenidos.
+       Canvas para el efecto Matrix:
+       Se posiciona de forma fija, cubre toda la ventana y tiene un z-index negativo
+       para que siempre se muestre detrás del contenido.
     ---------------------------------------------------------------------*/
     #matrix {
-      position: fixed; /* Siempre visible en toda la ventana */
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: -1; /* Se sitúa por detrás del contenido */
-      pointer-events: none; /* No interfiere con la interacción del usuario */
+      z-index: -1;
+      pointer-events: none;
     }
 
     /* ------------------------------------------------------------------
-       Encabezado (Header):
-       Contiene el logo y la navegación. Es fijo para mantenerse visible.
+       Encabezado (header):
+       Contenedor fijo en la parte superior que contiene el logo y el menú
+       de navegación, con fondo semitransparente (efecto vidrio).
     ---------------------------------------------------------------------*/
     .header {
       position: fixed;
@@ -85,7 +86,7 @@
 
     /* ------------------------------------------------------------------
        Logo:
-       Texto destacado con el color primario y sombra para resaltar.
+       Texto destacado con color primario y sombra para resaltar.
     ---------------------------------------------------------------------*/
     .logo {
       font-size: 1.5rem;
@@ -95,19 +96,14 @@
     }
 
     /* ------------------------------------------------------------------
-       Contenedor de enlaces de navegación:
-       Utiliza Flexbox para distribuir equitativamente el espacio.
+       Enlaces de navegación:
+       Distribuidos mediante flexbox, con espaciado y estilos para hover.
     ---------------------------------------------------------------------*/
     .nav-links {
       display: flex;
       gap: 1.5rem;
       align-items: center;
     }
-
-    /* ------------------------------------------------------------------
-       Estilos para enlaces y botones en la navegación:
-       Configuración de color, efectos de transición y hover.
-    ---------------------------------------------------------------------*/
     .nav-links a,
     .dropdown-btn {
       color: var(--text);
@@ -127,8 +123,8 @@
     }
 
     /* ------------------------------------------------------------------
-       Menús desplegables (Dropdown):
-       Se define la posición y la transición para mostrar/ocultar el contenido.
+       Menús desplegables (Dropdowns):
+       Permiten mostrar sub-enlaces al pasar el cursor, con transición suave.
     ---------------------------------------------------------------------*/
     .dropdown {
       position: relative;
@@ -166,9 +162,9 @@
     }
 
     /* ------------------------------------------------------------------
-       Secciones de la página:
-       Se define un padding general y margen para que los anclajes de scroll
-       tengan en cuenta el header fijo.
+       Secciones generales:
+       Cada sección tiene un padding amplio para separar el contenido del header
+       y asegurar un scroll adecuado.
     ---------------------------------------------------------------------*/
     section {
       padding: 8rem 2rem;
@@ -176,16 +172,21 @@
     }
 
     /* ------------------------------------------------------------------
-       Títulos de sección:
-       Títulos grandes, centrados y con un efecto decorativo con gradiente.
+       Títulos de sección unificados:
+       Se muestran centrados, de gran tamaño y ahora se les aplica un fondo
+       tipo vidrio, padding y borde para separarlos del fondo Matrix.
     ---------------------------------------------------------------------*/
     .section-title {
       font-size: 2.5rem;
       text-align: center;
       margin-bottom: 3rem;
-      position: relative;
+      padding: 0.5rem 1rem;
+      background: var(--glass); /* Fondo unificado */
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      backdrop-filter: blur(10px);
       display: inline-block;
-      width: 100%;
+      width: auto; /* Para que se ajuste al contenido */
     }
     .section-title::after {
       content: '';
@@ -198,9 +199,28 @@
     }
 
     /* ------------------------------------------------------------------
+       Cuadros de contenido unificados:
+       Se aplican a bloques de información (textos, descripciones, etc.)
+       usando fondo tipo vidrio, padding, borde y desenfoque para que el 
+       fondo Matrix se vea solo de fondo.
+    ---------------------------------------------------------------------*/
+    .content-card,
+    .diapo-text,
+    .hero-content,
+    .flip-card-back,
+    .feature-card {
+      background: var(--glass); /* Fondo tipo vidrio */
+      padding: 2rem;
+      border-radius: 1rem;
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+
+    /* ------------------------------------------------------------------
        Sección Hero:
-       Área principal de bienvenida. Tiene una imagen de fondo oscurecida.
-       El contenido se ve sobre un cuadro (hero-content) que lo separa del fondo Matrix.
+       Área principal de bienvenida con imagen de fondo oscurecida para
+       resaltar el contenido, que se muestra en un cuadro (hero-content)
+       que separa el texto del fondo Matrix.
     ---------------------------------------------------------------------*/
     .hero {
       position: relative;
@@ -211,17 +231,14 @@
       text-align: center;
       padding: 2rem;
       background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
-                  url('https://source.unsplash.com/1920x1080/?space,magic,technology') no-repeat center center/cover;
+                  url('https://source.unsplash.com/1920x1080/?space,magic,technology')
+                  no-repeat center center/cover;
       color: white;
       overflow: hidden;
     }
     .hero-content {
       position: relative;
-      background: var(--glass); /* Fondo tipo vidrio para destacar el contenido */
       padding: 3rem;
-      border-radius: 1.5rem;
-      border: 1px solid var(--border);
-      backdrop-filter: blur(10px);
       max-width: 800px;
       margin: 0 1rem;
       box-shadow: 0 0 40px rgba(0,0,0,0.3);
@@ -237,7 +254,7 @@
 
     /* ------------------------------------------------------------------
        Botón de llamada a la acción (CTA):
-       Botón con gradiente mágico y efectos al pasar el ratón.
+       Botón con efecto gradiente y animación para resaltar al hacer hover.
     ---------------------------------------------------------------------*/
     .cta-button {
       display: inline-flex;
@@ -258,8 +275,10 @@
     }
 
     /* ------------------------------------------------------------------
-       Cuadrícula de características:
-       Uso de grid para mostrar tarjetas de contenido de forma responsiva.
+       Cuadrícula de características (Conjuros Digitales):
+       Se usa grid para distribuir de forma responsiva las tarjetas que 
+       muestran información y gráficos.
+       Además, se unificó el estilo de .feature-card con el fondo tipo vidrio.
     ---------------------------------------------------------------------*/
     .features-grid {
       display: grid;
@@ -269,7 +288,7 @@
       margin: 0 auto;
     }
     .feature-card {
-      background: var(--card);
+      /* Estilo unificado: se usa var(--glass) en vez de var(--card) */
       padding: 2rem;
       border-radius: 1rem;
       border: 1px solid var(--border);
@@ -299,32 +318,9 @@
     }
 
     /* ------------------------------------------------------------------
-       Contenedores de contenido con texto:
-       Se añaden cuadros de fondo (tipo vidrio) para evitar que el fondo Matrix
-       se mezcle con los textos e imágenes, haciendo la lectura más cómoda.
-    ---------------------------------------------------------------------*/
-    .content-card {
-      background: var(--glass); /* Fondo similar al hero-content */
-      padding: 2rem;
-      border-radius: 1rem;
-      border: 1px solid var(--border);
-      backdrop-filter: blur(10px);
-      margin: 1rem auto;
-      max-width: 800px;
-    }
-    .diapo-text {
-      flex: 1;
-      background: var(--glass); /* Se cambia de var(--card) a var(--glass) para mayor opacidad */
-      padding: 2rem;
-      border-radius: 1rem;
-      border: 1px solid var(--border);
-      backdrop-filter: blur(10px);
-    }
-
-    /* ------------------------------------------------------------------
        Sección Diapositivas:
-       Cada diapositiva combina un efecto flip para imágenes y un contenedor
-       de texto descriptivo, ambos con fondo que resalta del Matrix.
+       Cada diapositiva combina una tarjeta flip y un contenedor de texto
+       descriptivo. Se usa el mismo estilo unificado en todos los cuadros.
     ---------------------------------------------------------------------*/
     .diapo-container {
       display: flex;
@@ -335,7 +331,7 @@
     .flip-card {
       width: 300px;
       height: 400px;
-      perspective: 1000px;  /* Permite el efecto 3D */
+      perspective: 1000px; /* Permite el efecto 3D */
     }
     .flip-card-inner {
       position: relative;
@@ -345,19 +341,19 @@
       transform-style: preserve-3d;
     }
     .flip-card:hover .flip-card-inner {
-      transform: rotateY(180deg); /* Gira la tarjeta al hacer hover */
+      transform: rotateY(180deg);
     }
     .flip-card-front,
     .flip-card-back {
       position: absolute;
       width: 100%;
       height: 100%;
-      backface-visibility: hidden; /* Oculta la cara trasera hasta que se voltea */
+      backface-visibility: hidden;
       border-radius: 1rem;
       overflow: hidden;
     }
     .flip-card-front {
-      background: var(--card);
+      background: var(--card); /* Se mantiene diferente para la imagen */
       border: 1px solid var(--border);
     }
     .flip-card-front img {
@@ -365,21 +361,19 @@
       height: 100%;
       object-fit: cover;
     }
+    /* La parte trasera de la tarjeta utiliza el mismo fondo unificado */
     .flip-card-back {
-      background: var(--glass);
       transform: rotateY(180deg);
-      padding: 2rem;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      border: 1px solid var(--primary);
     }
 
     /* ------------------------------------------------------------------
        Pie de Página:
-       Área de contacto e información adicional, se le da un fondo
-       para que el contenido no se mezcle con el efecto Matrix.
+       Área de contacto e información adicional, con fondo unificado para 
+       que el fondo Matrix se vea solo de fondo.
     ---------------------------------------------------------------------*/
     footer {
       text-align: center;
@@ -390,7 +384,7 @@
 
     /* ------------------------------------------------------------------
        Media Queries para dispositivos móviles:
-       Ajuste de tamaños y disposición de elementos para pantallas pequeñas.
+       Se adaptan tamaños y distribución para pantallas pequeñas.
     ---------------------------------------------------------------------*/
     @media (max-width: 768px) {
       .nav-links {
@@ -416,14 +410,14 @@
 <body>
   <!-- ------------------------------------------------------------------
        Canvas para el efecto Matrix:
-       Este canvas se ubica al inicio del body para cubrir toda la ventana,
-       sirviendo de fondo para todo el contenido.
+       Ubicado al inicio del body para cubrir toda la ventana y servir de
+       fondo a todo el contenido de la página.
   --------------------------------------------------------------------->
   <canvas id="matrix"></canvas>
 
   <!-- ------------------------------------------------------------------
-       Encabezado (Header):
-       Contiene el logo y el menú de navegación fijo en la parte superior.
+       Encabezado (header):
+       Contiene el logo y la navegación fija en la parte superior.
   --------------------------------------------------------------------->
   <header class="header">
     <div class="logo">GrimorioTech</div>
@@ -454,8 +448,8 @@
 
   <!-- ------------------------------------------------------------------
        Sección Hero:
-       Área principal con mensaje de bienvenida. El contenido se presenta sobre
-       un cuadro (hero-content) para resaltar y diferenciar del fondo Matrix.
+       Área de bienvenida con el mensaje principal, contenido en un
+       cuadro (hero-content) para separar el texto del fondo Matrix.
   --------------------------------------------------------------------->
   <section class="hero" id="inicio">
     <div class="hero-content">
@@ -466,8 +460,9 @@
   </section>
 
   <!-- ------------------------------------------------------------------
-       Sección: Conjuros Digitales:
-       Presenta tarjetas de contenido interactivo.
+       Sección Conjuros Digitales:
+       Presenta tarjetas de características (feature cards) con información 
+       y gráficos. Ahora las tarjetas usan el fondo unificado (var(--glass)).
   --------------------------------------------------------------------->
   <section id="servicios">
     <h2 class="section-title">Conjuros Digitales</h2>
@@ -491,9 +486,9 @@
   </section>
 
   <!-- ------------------------------------------------------------------
-       Sección: Introducción al Curso:
-       Breve bloque de contenido que explica el inicio del curso.
-       Se utiliza un contenedor (content-card) con fondo tipo vidrio.
+       Sección Introducción al Curso:
+       Bloque de información introductoria presentado en un contenedor
+       unificado (content-card).
   --------------------------------------------------------------------->
   <section id="introduccion">
     <div class="content-card">
@@ -503,9 +498,9 @@
   </section>
 
   <!-- ------------------------------------------------------------------
-       Sección: Mapas Conceptuales:
-       Explicación e invitación a explorar mapas de conocimiento interactivos.
-       Se utiliza el contenedor content-card para resaltar el texto.
+       Sección Mapas Conceptuales:
+       Presenta información sobre mapas de conocimiento usando el contenedor
+       unificado (content-card).
   --------------------------------------------------------------------->
   <section id="mapas">
     <div class="content-card">
@@ -515,9 +510,9 @@
   </section>
 
   <!-- ------------------------------------------------------------------
-       Sección: Tareas Místicas:
-       Bloque de contenido para invitar a resolver desafíos arcano-tecnológicos.
-       Se utiliza content-card para una presentación consistente.
+       Sección Tareas Místicas:
+       Bloque con información sobre desafíos arcano-tecnológicos, usando el
+       contenedor unificado (content-card).
   --------------------------------------------------------------------->
   <section id="tareas">
     <div class="content-card">
@@ -527,28 +522,26 @@
   </section>
 
   <!-- ------------------------------------------------------------------
-       Sección: Diapositiva 1 - Fundamentos Arcanos:
-       Combina un efecto flip para imágenes y un contenedor de texto descriptivo.
-       La parte del texto se muestra en diapo-text con fondo tipo vidrio.
+       Sección Diapositiva 1 - Fundamentos Arcanos:
+       Combina una tarjeta flip (imagen y texto en la parte trasera) y un
+       contenedor de texto descriptivo unificado (diapo-text).
   --------------------------------------------------------------------->
   <section id="diapositiva1">
     <h2 class="section-title">Diapositiva 1: Fundamentos Arcanos</h2>
     <div class="diapo-container">
-      <!-- Tarjeta flip: muestra imagen en la parte frontal y texto en la parte trasera -->
+      <!-- Tarjeta flip: contiene imagen en el frente y cuadro informativo en la parte trasera -->
       <div class="flip-card">
         <div class="flip-card-inner">
-          <!-- Lado frontal con imagen representativa -->
           <div class="flip-card-front">
             <img src="https://source.unsplash.com/random/600x800/?tech,code" alt="Fundamentos">
           </div>
-          <!-- Lado trasero con información detallada -->
           <div class="flip-card-back">
             <h3>Principios Esenciales</h3>
             <p>Domina las bases de la energía digital y su manipulación cuántica</p>
           </div>
         </div>
       </div>
-      <!-- Contenedor de texto descriptivo con fondo diferenciado -->
+      <!-- Contenedor de texto adicional con estilo unificado -->
       <div class="diapo-text">
         <h3>Introducción a la Tecnomagia</h3>
         <p>Descubre los fundamentos que conectan el mundo digital con las fuerzas arcanas ancestrales. Aprende a canalizar la energía a través de interfaces místicas y componentes electrónicos.</p>
@@ -557,9 +550,8 @@
   </section>
 
   <!-- ------------------------------------------------------------------
-       Sección: Diapositiva 2 - Componentes Mágicos:
-       Presenta otra tarjeta flip con imagen y descripción, utilizando
-       diapo-text para el cuadro de texto.
+       Sección Diapositiva 2 - Componentes Mágicos:
+       Combina una tarjeta flip y un contenedor de texto descriptivo unificado.
   --------------------------------------------------------------------->
   <section id="diapositiva2">
     <h2 class="section-title">Diapositiva 2: Componentes Mágicos</h2>
@@ -583,8 +575,8 @@
   </section>
 
   <!-- ------------------------------------------------------------------
-       Sección: Diapositiva 3 - Flujos de Energía:
-       Última diapositiva con efecto flip y contenedor de texto descriptivo.
+       Sección Diapositiva 3 - Flujos de Energía:
+       Combina una tarjeta flip y un contenedor de texto descriptivo unificado.
   --------------------------------------------------------------------->
   <section id="diapositiva3">
     <h2 class="section-title">Diapositiva 3: Flujos de Energía</h2>
@@ -609,7 +601,8 @@
 
   <!-- ------------------------------------------------------------------
        Pie de Página:
-       Sección de contacto e información adicional, con fondo diferenciado.
+       Área de contacto e información adicional, presentada en un cuadro
+       unificado para que el fondo Matrix se vea solo de fondo.
   --------------------------------------------------------------------->
   <footer id="contacto">
     <div class="content-card">
@@ -622,26 +615,26 @@
 
   <!-- ------------------------------------------------------------------
        JavaScript para el efecto Matrix:
-       Genera una animación de "lluvia" de 0 y 1 sobre el canvas que cubre
-       toda la ventana. La animación se actualiza en cada frame y se ajusta al tamaño de la ventana.
+       Se crea un efecto de "lluvia" de 0 y 1 que cubre toda la ventana.
+       La animación se actualiza en cada frame y se ajusta al tamaño de la ventana.
   --------------------------------------------------------------------->
   <script>
-    // Obtenemos el canvas a través de su ID para iniciar el efecto Matrix
+    // Obtenemos el canvas con ID 'matrix' y su contexto 2D para dibujar
     const canvas = document.getElementById('matrix');
     const ctx = canvas.getContext('2d');
 
-    // Ajustamos el tamaño del canvas para que cubra todo el viewport
+    // Ajustamos el tamaño del canvas para cubrir toda la ventana
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
     // Cadena con caracteres "0" y "1" que se usarán en la animación
     const matrixChars = "01";
-    // Definición del tamaño de la fuente
+    // Definición del tamaño de la fuente en píxeles
     const fontSize = 16;
-    // Calculamos el número de columnas que entran en el canvas según el tamaño de la fuente
+    // Calculamos la cantidad de columnas que caben en el ancho del canvas
     const columns = canvas.width / fontSize;
 
-    // Creamos un array para la posición vertical de cada columna en la lluvia de caracteres
+    // Creamos un array para almacenar la posición vertical de cada "gota" en las columnas
     const drops = [];
     for (let i = 0; i < columns; i++) {
       // Cada columna se inicia en una posición aleatoria dentro del alto del canvas
@@ -650,16 +643,15 @@
 
     // Función que dibuja y actualiza el efecto Matrix en cada frame
     function drawMatrix() {
-      // Se dibuja un rectángulo semitransparente sobre el canvas para crear el efecto de desvanecimiento de los caracteres
+      // Dibujamos un rectángulo semitransparente sobre todo el canvas para crear el efecto de desvanecimiento
       ctx.fillStyle = "rgba(18, 18, 18, 0.05)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Se define el color de los caracteres; usamos el valor de --primary
+      // Configuramos el color y la fuente para los caracteres
       ctx.fillStyle = "#4effb6";
-      // Se define la fuente utilizando un estilo monospace para mejor visualización
       ctx.font = fontSize + "px monospace";
 
-      // Para cada columna, se dibuja un caracter aleatorio
+      // Recorremos cada columna para dibujar un caracter aleatorio
       for (let i = 0; i < drops.length; i++) {
         const text = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
@@ -668,21 +660,21 @@
         if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
           drops[i] = 0;
         }
-        // Se incrementa la posición para simular la caída del caracter
+        // Incrementamos la posición para simular la caída del caracter
         drops[i]++;
       }
     }
 
-    // Función que actualiza la animación del Matrix de forma fluida mediante requestAnimationFrame
+    // Función de animación que actualiza el efecto Matrix de forma fluida
     function animateMatrix() {
       drawMatrix();
       requestAnimationFrame(animateMatrix);
     }
     
-    // Se inicia la animación del efecto Matrix
+    // Iniciamos la animación del efecto Matrix
     animateMatrix();
 
-    // Se actualizan las dimensiones del canvas al redimensionar la ventana
+    // Actualizamos el tamaño del canvas en caso de redimensionar la ventana
     window.addEventListener("resize", function() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
