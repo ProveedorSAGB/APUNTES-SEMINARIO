@@ -1,546 +1,1164 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GrimorioTech - Curso Mágico</title>
-  <style>
-    :root {
-      --primary: #4effb6;
-      --background: #121212;
-      --glass: rgba(255, 255, 255, 0.07);
-      --border: rgba(255, 255, 255, 0.2);
-      --text: #f0f0f0;
-      --accent: #15f5c0;
-      --magic-gradient: linear-gradient(45deg, #4effb6 0%, #15f5c0 100%);
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      scroll-behavior: smooth;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    body {
-      background-color: var(--background);
-      color: var(--text);
-      line-height: 1.6;
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    #matrix {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    .header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: var(--glass);
-      backdrop-filter: blur(10px);
-      padding: 1rem 2rem;
-      border-bottom: 1px solid var(--border);
-      z-index: 999;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-size: 1.5rem;
-      color: var(--primary);
-      font-weight: bold;
-      text-shadow: 0 0 15px rgba(78, 255, 182, 0.4);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-    }
-    .nav-links a,
-    .dropdown-btn {
-      color: var(--text);
-      text-decoration: none;
-      position: relative;
-      cursor: pointer;
-      background: none;
-      border: none;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      padding: 0.5rem 0;
-    }
-    .nav-links a:hover,
-    .dropdown-btn:hover {
-      color: var(--accent);
-      text-shadow: 0 0 10px rgba(21, 245, 192, 0.3);
-    }
-
-    .dropdown {
-      position: relative;
-    }
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: var(--glass);
-      min-width: 200px;
-      border: 1px solid var(--border);
-      border-radius: 0.5rem;
-      backdrop-filter: blur(15px);
-      z-index: 1;
-      top: 100%;
-      left: 0;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.3s ease;
-    }
-    .dropdown:hover .dropdown-content {
-      display: block;
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .dropdown-content a {
-      display: block;
-      padding: 0.8rem 1.2rem;
-      text-decoration: none;
-      color: var(--text);
-      transition: all 0.2s ease;
-    }
-    .dropdown-content a:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-      padding-left: 1.5rem;
-    }
-
-    section {
-      padding: 8rem 2rem 4rem;
-      scroll-margin-top: 80px;
-      position: relative;
-    }
-
-    .section-title {
-      font-size: clamp(1.8rem, 5vw, 2.5rem);
-      text-align: center;
-      margin: 0 auto 3rem;
-      padding: 1rem 2rem;
-      background: var(--glass);
-      border: 1px solid var(--border);
-      border-radius: 0.5rem;
-      backdrop-filter: blur(10px);
-      display: block;
-      width: 100%;
-      max-width: 1200px;
-      word-break: break-word;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    }
-    .section-title::after {
-      content: '';
-      display: block;
-      width: 60px;
-      height: 3px;
-      background: var(--magic-gradient);
-      margin: 0.5rem auto;
-      border-radius: 2px;
-    }
-
-    .content-card,
-    .diapo-text,
-    .hero-content,
-    .flip-card-back,
-    .feature-card {
-      background: var(--glass);
-      padding: 2rem;
-      border-radius: 1rem;
-      border: 1px solid var(--border);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-      margin: 0 auto;
-      max-width: 1200px;
-    }
-
-    .hero {
-      position: relative;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 2rem;
-      overflow: hidden;
-    }
-    .hero-content {
-      position: relative;
-      padding: 3rem;
-      width: 100%;
-      margin: 0 auto;
-      z-index: 1;
-    }
-    .hero h1 {
-      font-size: clamp(2.5rem, 8vw, 3.5rem);
-      margin-bottom: 1.5rem;
-      background: var(--magic-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      line-height: 1.2;
-      text-align: center;
-    }
-
-    .cta-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 1rem 2rem;
-      background: var(--magic-gradient);
-      color: black;
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 50px;
-      margin: 1.5rem auto 0;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .cta-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 5px 20px rgba(78, 255, 182, 0.3);
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .feature-card {
-      padding: 2rem;
-      border-radius: 1rem;
-      border: 1px solid var(--border);
-      text-align: center;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    .feature-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-
-    .diapo-container {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-      margin: 3rem auto;
-      max-width: 1200px;
-    }
-    .flip-card {
-      width: 100%;
-      max-width: 400px;
-      height: 500px;
-      perspective: 1000px;
-      flex-shrink: 0;
-    }
-    .flip-card-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      transition: transform 0.6s;
-      transform-style: preserve-3d;
-    }
-    .flip-card:hover .flip-card-inner {
-      transform: rotateY(180deg);
-    }
-    .flip-card-front,
-    .flip-card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 1rem;
-      overflow: hidden;
-    }
-    .flip-card-front {
-      background: var(--glass);
-      border: 1px solid var(--border);
-    }
-    .flip-card-front img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .flip-card-back {
-      transform: rotateY(180deg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .diapo-text {
-      flex-grow: 1;
-      min-width: 300px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 4rem 1rem;
-      border-top: 1px solid var(--border);
-      background: var(--glass);
-      max-width: 100%;
-    }
-
-    @media (max-width: 768px) {
-      section {
-        padding: 6rem 1rem 2rem;
-      }
-      
-      .nav-links {
-        gap: 1rem;
-        font-size: 0.9rem;
-      }
-      
-      .hero-content {
-        padding: 2rem;
-      }
-      
-      .features-grid {
-        grid-template-columns: 1fr;
-        padding: 0 1rem;
-      }
-      
-      .diapo-container {
-        flex-direction: column;
-        gap: 2rem;
-        padding: 0 1rem;
-      }
-      
-      .flip-card {
-        height: 400px;
-        max-width: 100%;
-      }
-      
-      .section-title {
-        font-size: 1.8rem;
-        padding: 1rem;
-        margin: 0 auto 2rem;
-      }
-      
-      .diapo-text {
-        min-width: 100%;
-      }
-      
-      .content-card,
-      .diapo-text,
-      .feature-card {
-        margin: 0 1rem;
-        width: calc(100% - 2rem);
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeonFinance Matrix</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@300;400;700&display=swap');
+        
+        :root {
+            --neon-green: #0f0;
+            --matrix-green: #00ff41;
+            --dark-bg: #0a0a0a;
+        }
+        
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background-color: var(--dark-bg);
+            color: var(--neon-green);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, .neon-title {
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green);
+        }
+        
+        .neon-border {
+            border: 1px solid var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-green), inset 0 0 10px var(--neon-green);
+        }
+        
+        .neon-button {
+            background: transparent;
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+            transition: all 0.3s;
+            box-shadow: 0 0 5px var(--neon-green);
+        }
+        
+        .neon-button:hover {
+            background: var(--neon-green);
+            color: black;
+            box-shadow: 0 0 20px var(--neon-green);
+            transform: translateY(-2px);
+        }
+        
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="0" y="10" font-family="monospace" font-size="10" fill="%2300ff41">0101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101</text></svg>');
+        }
+        
+        .flip-card {
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .flip-card-back {
+            transform: rotateY(180deg);
+            background-color: rgba(0, 30, 0, 0.8);
+            border: 1px solid var(--matrix-green);
+        }
+        
+        .terminal {
+            background-color: rgba(0, 15, 0, 0.7);
+            border: 1px solid var(--matrix-green);
+            font-family: 'Courier New', monospace;
+            padding: 1rem;
+            position: relative;
+        }
+        
+        .terminal::before {
+            content: ">";
+            position: absolute;
+            left: 10px;
+            color: var(--matrix-green);
+        }
+        
+        .input-field {
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid var(--matrix-green);
+            color: var(--neon-green);
+            outline: none;
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+        }
+        
+        .input-field:focus {
+            border-bottom: 1px solid var(--neon-green);
+            box-shadow: 0 1px 0 0 var(--neon-green);
+        }
+        
+        .tab {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .active-tab {
+            display: block;
+        }
+        
+        .tab-button {
+            background: transparent;
+            border: none;
+            color: var(--neon-green);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .tab-button.active {
+            color: var(--matrix-green);
+            text-shadow: 0 0 5px var(--matrix-green);
+        }
+        
+        .tab-button.active::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--matrix-green);
+            box-shadow: 0 0 5px var(--matrix-green);
+        }
+        
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .matrix-char {
+            position: absolute;
+            color: var(--matrix-green);
+            font-size: 16px;
+            opacity: 0.8;
+            text-shadow: 0 0 8px var(--matrix-green);
+        }
+        
+        .glitch {
+            position: relative;
+        }
+        
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+        }
+        
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff00c1;
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
+        }
+        
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 #00fff9, 2px 2px #ff00c1;
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim-2 2s infinite linear alternate-reverse;
+        }
+        
+        @keyframes glitch-anim-1 {
+            0% { clip: rect(32px, 9999px, 76px, 0); }
+            20% { clip: rect(108px, 9999px, 23px, 0); }
+            40% { clip: rect(91px, 9999px, 29px, 0); }
+            60% { clip: rect(105px, 9999px, 58px, 0); }
+            80% { clip: rect(85px, 9999px, 60px, 0); }
+            100% { clip: rect(92px, 9999px, 98px, 0); }
+        }
+        
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(65px, 9999px, 119px, 0); }
+            20% { clip: rect(25px, 9999px, 22px, 0); }
+            40% { clip: rect(111px, 9999px, 93px, 0); }
+            60% { clip: rect(42px, 9999px, 96px, 0); }
+            80% { clip: rect(4px, 9999px, 29px, 0); }
+            100% { clip: rect(37px, 9999px, 15px, 0); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+    </style>
 </head>
 <body>
-  <canvas id="matrix"></canvas>
-
-  <header class="header">
-    <div class="logo">GrimorioTech</div>
-    <nav class="nav-links">
-      <a href="#inicio">Inicio</a>
-      <a href="#servicios">Conjuros</a>
-      <div class="dropdown">
-        <button class="dropdown-btn">Resumen</button>
-        <div class="dropdown-content">
-          <a href="#introduccion">Introducción al Curso</a>
-          <a href="#mapas">Mapas Conceptuales</a>
-          <a href="#tareas">Tareas</a>
-        </div>
-      </div>
-      <div class="dropdown">
-        <button class="dropdown-btn">Diapositivas</button>
-        <div class="dropdown-content">
-          <a href="#diapositiva1">Diapositiva 1</a>
-          <a href="#diapositiva2">Diapositiva 2</a>
-          <a href="#diapositiva3">Diapositiva 3</a>
-        </div>
-      </div>
-      <a href="#contacto">Invocar</a>
-    </nav>
-  </header>
-
-  <section class="hero" id="inicio">
-    <div class="hero-content">
-      <h1>Bienvenido al Grimorio Digital</h1>
-      <p>Domina los secretos de la tecnología arcana y da vida a tus creaciones digitales</p>
-      <a href="#introduccion" class="cta-button">🌟 Comenzar el Ritual</a>
-    </div>
-  </section>
-
-  <section id="servicios">
-    <h2 class="section-title">Conjuros Digitales</h2>
-    <div class="features-grid">
-      <div class="feature-card">
-        <img src="https://img.icons8.com/ios-filled/100/4effb6/source-code.png" alt="Desarrollo Web"/>
-        <h3>Páginas Encantadas</h3>
-        <p>Portales dimensionales responsive creados con las últimas tecnologías místicas</p>
-      </div>
-      <div class="feature-card">
-        <img src="https://img.icons8.com/ios-filled/100/4effb6/magic-book.png" alt="Apps Móviles"/>
-        <h3>Aplicaciones Arcanas</h3>
-        <p>Invocación de apps nativas e híbridas con poderosos hechizos funcionales</p>
-      </div>
-      <div class="feature-card">
-        <img src="https://img.icons8.com/ios-filled/100/4effb6/cloud.png" alt="Cloud"/>
-        <h3>Nube Etérea</h3>
-        <p>Almacenamiento en dimensiones paralelas con escalamiento automático</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="introduccion">
-    <div class="content-card">
-      <h2 class="section-title">Introducción al Curso</h2>
-      <p>Sumérgete en un viaje interdimensional donde la tecnología y la magia se fusionan para crear poderosos artefactos digitales.</p>
-    </div>
-  </section>
-
-  <section id="mapas">
-    <div class="content-card">
-      <h2 class="section-title">Mapas Conceptuales</h2>
-      <p>Explora las conexiones místicas entre diferentes conceptos a través de nuestros mapas de conocimiento interactivos.</p>
-    </div>
-  </section>
-
-  <section id="tareas">
-    <div class="content-card">
-      <h2 class="section-title">Tareas Místicas</h2>
-      <p>Demuestra tu dominio de los conjuros digitales completando estos desafíos arcano-tecnológicos.</p>
-    </div>
-  </section>
-
-  <section id="diapositiva1">
-    <h2 class="section-title">Diapositiva 1: Fundamentos Arcanos</h2>
-    <div class="diapo-container">
-      <div class="flip-card">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <img src="https://source.unsplash.com/random/600x800/?tech,code" alt="Fundamentos">
-          </div>
-          <div class="flip-card-back">
-            <h3>Principios Esenciales</h3>
-            <p>Domina las bases de la energía digital y su manipulación cuántica</p>
-          </div>
-        </div>
-      </div>
-      <div class="diapo-text">
-        <h3>Introducción a la Tecnomagia</h3>
-        <p>Descubre los fundamentos que conectan el mundo digital con las fuerzas arcanas ancestrales. Aprende a canalizar la energía a través de interfaces místicas y componentes electrónicos.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="diapositiva2">
-    <h2 class="section-title">Diapositiva 2: Componentes Mágicos</h2>
-    <div class="diapo-container">
-      <div class="flip-card">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <img src="https://source.unsplash.com/random/600x800/?circuit,tech" alt="Componentes">
-          </div>
-          <div class="flip-card-back">
-            <h3>Elementos Clave</h3>
-            <p>HTML5, CSS3 y JavaScript: Los pilares de la creación digital</p>
-          </div>
-        </div>
-      </div>
-      <div class="diapo-text">
-        <h3>Arquitectura Arcana</h3>
-        <p>Desentraña los misterios de los lenguajes sagrados de la web. Domina la alquimia de estilos y la invocación de funciones místicas para crear hechizos interactivos.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="diapositiva3">
-    <h2 class="section-title">Diapositiva 3: Flujos de Energía</h2>
-    <div class="diapo-container">
-      <div class="flip-card">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <img src="https://source.unsplash.com/random/600x800/?data,network" alt="Flujos">
-          </div>
-          <div class="flip-card-back">
-            <h3>Circulación Cuántica</h3>
-            <p>Controla el flujo de datos a través de algoritmos místicos</p>
-          </div>
-        </div>
-      </div>
-      <div class="diapo-text">
-        <h3>Dinámica Energética</h3>
-        <p>Aprende a manipular los flujos de información cuántica mediante arquitecturas limpias y patrones de diseño ancestrales. Domina el arte de la optimización energética.</p>
-      </div>
-    </div>
-  </section>
-
-  <footer id="contacto">
-    <div class="content-card">
-      <h3>Conecta con el Consejo Arcano</h3>
-      <p>📧 Email: oraculo@grimoriotech.com</p>
-      <p>🔮 Teléfono: +1 234 567 890</p>
-      <p>© 2025 GrimorioTech - Protegido por sellos de protección digital</p>
-    </div>
-  </footer>
-
-  <script>
-    const canvas = document.getElementById('matrix');
-    const ctx = canvas.getContext('2d');
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      fontSize = Math.max(14, Math.min(20, window.innerWidth / 100));
-      columns = Math.floor(canvas.width / fontSize);
-      drops = new Array(columns).fill(0).map(() => Math.random() * canvas.height);
-    }
-
-    let fontSize = 16;
-    let columns;
-    let drops = [];
-
-    const matrixChars = "01";
+    <div class="matrix-rain" id="matrixRain"></div>
+    <div class="matrix-bg"></div>
     
-    function drawMatrix() {
-      ctx.fillStyle = "rgba(18, 18, 18, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#4effb6";
-      ctx.font = `${fontSize}px monospace`;
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4 glitch" data-text="NeonFinance">NeonFinance</h1>
+            <p class="text-xl text-gray-400">Sistema de gestión financiera futurista</p>
+        </header>
+        
+        <!-- Navigation -->
+        <nav class="flex flex-wrap justify-center gap-4 mb-12">
+            <button class="tab-button neon-button px-6 py-2 rounded-md active" data-tab="intro">Introducción</button>
+            <button class="tab-button neon-button px-6 py-2 rounded-md" data-tab="apps">Aplicaciones</button>
+            <button class="tab-button neon-button px-6 py-2 rounded-md" data-tab="tasks">Tareas</button>
+            <button class="tab-button neon-button px-6 py-2 rounded-md" data-tab="slides">Diapositivas</button>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="neon-border rounded-lg p-6 bg-black bg-opacity-70 backdrop-blur-sm">
+            <!-- Intro Tab -->
+            <div id="intro" class="tab active-tab">
+                <h2 class="text-3xl mb-6 neon-title">Bienvenido al Sistema NeonFinance</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="terminal p-6 rounded-lg">
+                        <p class="mb-4">> Sistema inicializado...</p>
+                        <p class="mb-4">> Cargando módulos financieros...</p>
+                        <p class="mb-4">> Conexión establecida con bancos...</p>
+                        <p class="text-green-400">> Sistema listo [OK]</p>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl mb-4 neon-title">Características principales</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-code text-green-400 mt-1 mr-3"></i>
+                                <span>Simuladores financieros avanzados</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-chart-line text-green-400 mt-1 mr-3"></i>
+                                <span>Análisis de inversiones en tiempo real</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-tasks text-green-400 mt-1 mr-3"></i>
+                                <span>Gestor de tareas financieras</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-sliders-h text-green-400 mt-1 mr-3"></i>
+                                <span>Visualización interactiva de datos</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-8 grid md:grid-cols-3 gap-6">
+                    <div class="neon-border p-4 rounded-lg hover:bg-green-900 hover:bg-opacity-20 transition">
+                        <h4 class="text-xl mb-2 flex items-center">
+                            <i class="fas fa-lock mr-2 text-green-400"></i>
+                            Seguridad
+                        </h4>
+                        <p class="text-gray-300">Encriptación de nivel militar para proteger tus datos financieros.</p>
+                    </div>
+                    <div class="neon-border p-4 rounded-lg hover:bg-green-900 hover:bg-opacity-20 transition">
+                        <h4 class="text-xl mb-2 flex items-center">
+                            <i class="fas fa-bolt mr-2 text-green-400"></i>
+                            Rendimiento
+                        </h4>
+                        <p class="text-gray-300">Procesamiento ultrarrápido incluso con grandes volúmenes de datos.</p>
+                    </div>
+                    <div class="neon-border p-4 rounded-lg hover:bg-green-900 hover:bg-opacity-20 transition">
+                        <h4 class="text-xl mb-2 flex items-center">
+                            <i class="fas fa-eye mr-2 text-green-400"></i>
+                            Visualización
+                        </h4>
+                        <p class="text-gray-300">Gráficos interactivos y representaciones 3D de tus finanzas.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Apps Tab -->
+            <div id="apps" class="tab">
+                <h2 class="text-3xl mb-6 neon-title">Aplicaciones Financieras</h2>
+                
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="neon-border p-4 rounded-lg bg-black bg-opacity-50">
+                        <h3 class="text-2xl mb-4 flex items-center">
+                            <i class="fas fa-coins mr-3 text-green-400"></i>
+                            Simulador CETES
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block mb-1">Monto a invertir ($)</label>
+                                <input type="number" id="cetes-amount" class="input-field w-full" placeholder="Ej. 10000">
+                            </div>
+                            <div>
+                                <label class="block mb-1">Plazo (días)</label>
+                                <input type="number" id="cetes-days" class="input-field w-full" placeholder="Ej. 28">
+                            </div>
+                            <div>
+                                <label class="block mb-1">Tasa de interés anual (%)</label>
+                                <input type="number" id="cetes-rate" class="input-field w-full" placeholder="Ej. 11.5" step="0.1">
+                            </div>
+                            <button id="calculate-cetes" class="neon-button w-full py-2 rounded-md">
+                                Calcular rendimiento
+                            </button>
+                        </div>
+                        <div id="cetes-result" class="mt-4 p-3 bg-green-900 bg-opacity-20 rounded hidden">
+                            <h4 class="text-lg font-bold mb-2">Resultado:</h4>
+                            <p id="cetes-output"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="neon-border p-4 rounded-lg bg-black bg-opacity-50">
+                        <h3 class="text-2xl mb-4 flex items-center">
+                            <i class="fas fa-percentage mr-3 text-green-400"></i>
+                            Simulador de Intereses
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block mb-1">Capital inicial ($)</label>
+                                <input type="number" id="interest-principal" class="input-field w-full" placeholder="Ej. 5000">
+                            </div>
+                            <div>
+                                <label class="block mb-1">Tasa de interés anual (%)</label>
+                                <input type="number" id="interest-rate" class="input-field w-full" placeholder="Ej. 8.5" step="0.1">
+                            </div>
+                            <div>
+                                <label class="block mb-1">Período (años)</label>
+                                <input type="number" id="interest-years" class="input-field w-full" placeholder="Ej. 5">
+                            </div>
+                            <button id="calculate-interest" class="neon-button w-full py-2 rounded-md">
+                                Calcular intereses
+                            </button>
+                        </div>
+                        <div id="interest-result" class="mt-4 p-3 bg-green-900 bg-opacity-20 rounded hidden">
+                            <h4 class="text-lg font-bold mb-2">Resultado:</h4>
+                            <p id="interest-output"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="neon-border p-4 rounded-lg bg-black bg-opacity-50">
+                        <h3 class="text-2xl mb-4 flex items-center">
+                            <i class="fas fa-chart-pie mr-3 text-green-400"></i>
+                            Simulador de Inversión
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block mb-1">Inversión mensual ($)</label>
+                                <input type="number" id="investment-monthly" class="input-field w-full" placeholder="Ej. 2000">
+                            </div>
+                            <div>
+                                <label class="block mb-1">Rendimiento anual (%)</label>
+                                <input type="number" id="investment-return" class="input-field w-full" placeholder="Ej. 10" step="0.1">
+                            </div>
+                            <div>
+                                <label class="block mb-1">Años de inversión</label>
+                                <input type="number" id="investment-years" class="input-field w-full" placeholder="Ej. 10">
+                            </div>
+                            <button id="calculate-investment" class="neon-button w-full py-2 rounded-md">
+                                Proyectar inversión
+                            </button>
+                        </div>
+                        <div id="investment-result" class="mt-4 p-3 bg-green-900 bg-opacity-20 rounded hidden">
+                            <h4 class="text-lg font-bold mb-2">Resultado:</h4>
+                            <p id="investment-output"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="neon-border p-6 rounded-lg">
+                    <h3 class="text-2xl mb-4 flex items-center">
+                        <i class="fas fa-history mr-3 text-green-400"></i>
+                        Historial de Simulaciones
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b border-green-800">
+                                    <th class="py-2 px-4 text-left">Fecha</th>
+                                    <th class="py-2 px-4 text-left">Tipo</th>
+                                    <th class="py-2 px-4 text-left">Monto</th>
+                                    <th class="py-2 px-4 text-left">Resultado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="simulation-history">
+                                <!-- Las simulaciones se agregarán aquí dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tasks Tab -->
+            <div id="tasks" class="tab">
+                <h2 class="text-3xl mb-6 neon-title">Gestor de Tareas Financieras</h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="neon-border p-6 rounded-lg">
+                        <h3 class="text-2xl mb-4 flex items-center">
+                            <i class="fas fa-plus-circle mr-3 text-green-400"></i>
+                            Nueva Tarea
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block mb-1">Título</label>
+                                <input type="text" id="task-title" class="input-field w-full" placeholder="Ej. Pagar impuestos">
+                            </div>
+                            <div>
+                                <label class="block mb-1">Descripción</label>
+                                <textarea id="task-description" class="input-field w-full" rows="3" placeholder="Detalles de la tarea..."></textarea>
+                            </div>
+                            <div>
+                                <label class="block mb-1">Fecha límite</label>
+                                <input type="date" id="task-deadline" class="input-field w-full">
+                            </div>
+                            <div>
+                                <label class="block mb-1">Prioridad</label>
+                                <select id="task-priority" class="input-field w-full">
+                                    <option value="low">Baja</option>
+                                    <option value="medium" selected>Media</option>
+                                    <option value="high">Alta</option>
+                                </select>
+                            </div>
+                            <button id="add-task" class="neon-button w-full py-2 rounded-md">
+                                Agregar Tarea
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="neon-border p-6 rounded-lg">
+                        <h3 class="text-2xl mb-4 flex items-center">
+                            <i class="fas fa-tasks mr-3 text-green-400"></i>
+                            Lista de Tareas
+                        </h3>
+                        <div class="flex mb-4">
+                            <button id="filter-all" class="neon-button px-4 py-1 rounded-l-md active-filter">Todas</button>
+                            <button id="filter-pending" class="neon-button px-4 py-1 border-l-0">Pendientes</button>
+                            <button id="filter-completed" class="neon-button px-4 py-1 border-l-0 rounded-r-md">Completadas</button>
+                        </div>
+                        <div id="task-list" class="space-y-3 max-h-96 overflow-y-auto">
+                            <!-- Las tareas se agregarán aquí dinámicamente -->
+                            <p class="text-gray-500 text-center py-10">No hay tareas registradas</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 neon-border p-6 rounded-lg">
+                    <h3 class="text-2xl mb-4 flex items-center">
+                        <i class="fas fa-chart-bar mr-3 text-green-400"></i>
+                        Estadísticas de Tareas
+                    </h3>
+                    <div class="grid md:grid-cols-4 gap-4 text-center">
+                        <div class="p-4 neon-border rounded-lg">
+                            <div class="text-3xl font-bold mb-1" id="total-tasks">0</div>
+                            <div class="text-sm text-gray-400">Total</div>
+                        </div>
+                        <div class="p-4 neon-border rounded-lg">
+                            <div class="text-3xl font-bold mb-1" id="completed-tasks">0</div>
+                            <div class="text-sm text-gray-400">Completadas</div>
+                        </div>
+                        <div class="p-4 neon-border rounded-lg">
+                            <div class="text-3xl font-bold mb-1" id="pending-tasks">0</div>
+                            <div class="text-sm text-gray-400">Pendientes</div>
+                        </div>
+                        <div class="p-4 neon-border rounded-lg">
+                            <div class="text-3xl font-bold mb-1" id="high-priority-tasks">0</div>
+                            <div class="text-sm text-gray-400">Alta prioridad</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slides Tab -->
+            <div id="slides" class="tab">
+                <h2 class="text-3xl mb-6 neon-title">Diapositivas Educativas</h2>
+                
+                <div class="flex justify-center mb-8">
+                    <div class="inline-flex rounded-md shadow-sm">
+                        <button id="prev-slide" class="neon-button px-4 py-2 rounded-l-lg">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <span class="px-4 py-2 bg-black bg-opacity-50 border-t border-b border-green-500 flex items-center">
+                            <span id="current-slide">1</span>
+                            <span class="mx-1">/</span>
+                            <span id="total-slides">5</span>
+                        </span>
+                        <button id="next-slide" class="neon-button px-4 py-2 rounded-r-lg">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Slide 1 -->
+                    <div class="flip-card h-64">
+                        <div class="flip-card-inner h-full">
+                            <div class="flip-card-front neon-border rounded-lg bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')">
+                                <h3 class="text-2xl bg-black bg-opacity-70 px-4 py-2 rounded">Conceptos Básicos</h3>
+                            </div>
+                            <div class="flip-card-back rounded-lg p-4">
+                                <h3 class="text-xl font-bold mb-3">Conceptos Básicos de Finanzas</h3>
+                                <p class="text-sm">Aprende los fundamentos de las finanzas personales, incluyendo presupuestos, ahorro, inversión y gestión de deudas.</p>
+                                <div class="mt-4 text-xs text-gray-400">
+                                    <p><i class="fas fa-clock mr-2"></i>Duración: 15 min</p>
+                                    <p><i class="fas fa-star mr-2"></i>Nivel: Principiante</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 2 -->
+                    <div class="flip-card h-64">
+                        <div class="flip-card-inner h-full">
+                            <div class="flip-card-front neon-border rounded-lg bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1415&q=80')">
+                                <h3 class="text-2xl bg-black bg-opacity-70 px-4 py-2 rounded">Inversiones</h3>
+                            </div>
+                            <div class="flip-card-back rounded-lg p-4">
+                                <h3 class="text-xl font-bold mb-3">Introducción a las Inversiones</h3>
+                                <p class="text-sm">Descubre los diferentes tipos de instrumentos de inversión, desde acciones y bonos hasta fondos indexados y bienes raíces.</p>
+                                <div class="mt-4 text-xs text-gray-400">
+                                    <p><i class="fas fa-clock mr-2"></i>Duración: 20 min</p>
+                                    <p><i class="fas fa-star mr-2"></i>Nivel: Intermedio</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 3 -->
+                    <div class="flip-card h-64">
+                        <div class="flip-card-inner h-full">
+                            <div class="flip-card-front neon-border rounded-lg bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1535320903710-d993d3d77d29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')">
+                                <h3 class="text-2xl bg-black bg-opacity-70 px-4 py-2 rounded">CETES</h3>
+                            </div>
+                            <div class="flip-card-back rounded-lg p-4">
+                                <h3 class="text-xl font-bold mb-3">Inversión en CETES</h3>
+                                <p class="text-sm">Todo lo que necesitas saber sobre los Certificados de la Tesorería de la Federación: cómo funcionan, riesgos y beneficios.</p>
+                                <div class="mt-4 text-xs text-gray-400">
+                                    <p><i class="fas fa-clock mr-2"></i>Duración: 12 min</p>
+                                    <p><i class="fas fa-star mr-2"></i>Nivel: Principiante</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 4 -->
+                    <div class="flip-card h-64">
+                        <div class="flip-card-inner h-full">
+                            <div class="flip-card-front neon-border rounded-lg bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')">
+                                <h3 class="text-2xl bg-black bg-opacity-70 px-4 py-2 rounded">Interés Compuesto</h3>
+                            </div>
+                            <div class="flip-card-back rounded-lg p-4">
+                                <h3 class="text-xl font-bold mb-3">El Poder del Interés Compuesto</h3>
+                                <p class="text-sm">Comprende cómo el interés compuesto puede hacer crecer tu dinero exponencialmente con el tiempo y cómo aprovecharlo.</p>
+                                <div class="mt-4 text-xs text-gray-400">
+                                    <p><i class="fas fa-clock mr-2"></i>Duración: 18 min</p>
+                                    <p><i class="fas fa-star mr-2"></i>Nivel: Intermedio</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 5 -->
+                    <div class="flip-card h-64">
+                        <div class="flip-card-inner h-full">
+                            <div class="flip-card-front neon-border rounded-lg bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1604595269761-9c331603dab4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80')">
+                                <h3 class="text-2xl bg-black bg-opacity-70 px-4 py-2 rounded">Planificación Financiera</h3>
+                            </div>
+                            <div class="flip-card-back rounded-lg p-4">
+                                <h3 class="text-xl font-bold mb-3">Planificación Financiera a Largo Plazo</h3>
+                                <p class="text-sm">Estrategias para asegurar tu futuro financiero, incluyendo jubilación, seguros y gestión de patrimonio.</p>
+                                <div class="mt-4 text-xs text-gray-400">
+                                    <p><i class="fas fa-clock mr-2"></i>Duración: 25 min</p>
+                                    <p><i class="fas fa-star mr-2"></i>Nivel: Avanzado</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 6 -->
+                    <div class="flip-card h-64">
+                        <div class="flip-card-inner h-full">
+                            <div class="flip-card-front neon-border rounded-lg bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1621761191319-c6fb62004040?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80')">
+                                <h3 class="text-2xl bg-black bg-opacity-70 px-4 py-2 rounded">Criptomonedas</h3>
+                            </div>
+                            <div class="flip-card-back rounded-lg p-4">
+                                <h3 class="text-xl font-bold mb-3">Inversión en Criptomonedas</h3>
+                                <p class="text-sm">Guía completa sobre blockchain, Bitcoin, Ethereum y otras criptomonedas. Riesgos y oportunidades en este mercado volátil.</p>
+                                <div class="mt-4 text-xs text-gray-400">
+                                    <p><i class="fas fa-clock mr-2"></i>Duración: 22 min</p>
+                                    <p><i class="fas fa-star mr-2"></i>Nivel: Avanzado</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 neon-border p-6 rounded-lg">
+                    <h3 class="text-2xl mb-4 flex items-center">
+                        <i class="fas fa-info-circle mr-3 text-green-400"></i>
+                        Información Adicional
+                    </h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-xl mb-2">Recursos Recomendados</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="text-green-400 hover:underline">Libros de finanzas personales</a></li>
+                                <li><a href="#" class="text-green-400 hover:underline">Podcasts sobre inversión</a></li>
+                                <li><a href="#" class="text-green-400 hover:underline">Cursos en línea gratuitos</a></li>
+                                <li><a href="#" class="text-green-400 hover:underline">Herramientas de análisis financiero</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl mb-2">Próximas Actualizaciones</h4>
+                            <ul class="space-y-2">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                                    <span>Módulo de impuestos y deducciones</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-spinner text-yellow-400 mt-1 mr-2"></i>
+                                    <span>Integración con bancos mexicanos</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="far fa-clock text-gray-400 mt-1 mr-2"></i>
+                                    <span>Análisis de portafolio avanzado</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="mt-12 text-center text-gray-500 text-sm">
+            <div class="flex justify-center space-x-6 mb-4">
+                <a href="#" class="text-gray-400 hover:text-green-400 transition">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-green-400 transition">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-green-400 transition">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-green-400 transition">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+            <p class="mb-2">© 2023 NeonFinance Matrix. Todos los derechos reservados.</p>
+            <p class="text-xs">Este sitio es con fines educativos. No proporciona asesoramiento financiero real.</p>
+        </footer>
+    </div>
 
-      for (let i = 0; i < columns; i++) {
-        const text = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.5) {
-          drops[i] = 0;
+    <script>
+        // Matrix Rain Effect
+        function createMatrixRain() {
+            const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+            const container = document.getElementById('matrixRain');
+            const fontSize = 16;
+            const columns = Math.floor(window.innerWidth / fontSize);
+            
+            for (let i = 0; i < columns; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-char';
+                column.style.left = `${i * fontSize}px`;
+                column.style.top = `${-fontSize}px`;
+                column.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                column.style.animationDelay = `${Math.random() * 2}s`;
+                
+                let text = '';
+                const length = Math.floor(Math.random() * 10) + 5;
+                for (let j = 0; j < length; j++) {
+                    text += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                
+                column.textContent = text;
+                container.appendChild(column);
+                
+                animateMatrixChar(column);
+            }
         }
-        drops[i]++;
-      }
-    }
-
-    function animateMatrix() {
-      drawMatrix();
-      requestAnimationFrame(animateMatrix);
-    }
-
-    resizeCanvas();
-    animateMatrix();
-
-    window.addEventListener("resize", () => {
-      resizeCanvas();
-      drawMatrix();
-    });
-  </script>
+        
+        function animateMatrixChar(element) {
+            let posY = parseInt(element.style.top);
+            const speed = Math.random() * 5 + 5;
+            const maxY = window.innerHeight + 100;
+            
+            const move = () => {
+                posY += speed;
+                element.style.top = `${posY}px`;
+                
+                if (posY > maxY) {
+                    posY = -parseInt(element.style.height);
+                    element.style.top = `${posY}px`;
+                    
+                    // Change some characters randomly
+                    if (Math.random() > 0.7) {
+                        const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+                        let newText = '';
+                        for (let i = 0; i < element.textContent.length; i++) {
+                            if (Math.random() > 0.8) {
+                                newText += chars.charAt(Math.floor(Math.random() * chars.length));
+                            } else {
+                                newText += element.textContent.charAt(i);
+                            }
+                        }
+                        element.textContent = newText;
+                    }
+                }
+                
+                requestAnimationFrame(move);
+            };
+            
+            move();
+        }
+        
+        // Tab Navigation
+        function setupTabs() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons and tabs
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active-tab'));
+                    
+                    // Add active class to clicked button and corresponding tab
+                    button.classList.add('active');
+                    const tabId = button.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active-tab');
+                });
+            });
+        }
+        
+        // Financial Calculators
+        function setupCalculators() {
+            // CETES Calculator
+            document.getElementById('calculate-cetes').addEventListener('click', () => {
+                const amount = parseFloat(document.getElementById('cetes-amount').value);
+                const days = parseInt(document.getElementById('cetes-days').value);
+                const rate = parseFloat(document.getElementById('cetes-rate').value);
+                
+                if (isNaN(amount) || isNaN(days) || isNaN(rate)) {
+                    alert('Por favor ingresa valores válidos');
+                    return;
+                }
+                
+                const dailyRate = rate / 36000; // Tasa diaria (360 días bancarios)
+                const interest = amount * dailyRate * days;
+                const total = amount + interest;
+                
+                document.getElementById('cetes-output').innerHTML = `
+                    Inversión inicial: $${amount.toFixed(2)}<br>
+                    Intereses ganados: $${interest.toFixed(2)}<br>
+                    Total al vencimiento: $${total.toFixed(2)}<br>
+                    Rendimiento anualizado: ${rate.toFixed(2)}%
+                `;
+                
+                document.getElementById('cetes-result').classList.remove('hidden');
+                
+                // Add to history
+                addToHistory('CETES', amount, total);
+            });
+            
+            // Interest Calculator
+            document.getElementById('calculate-interest').addEventListener('click', () => {
+                const principal = parseFloat(document.getElementById('interest-principal').value);
+                const rate = parseFloat(document.getElementById('interest-rate').value);
+                const years = parseInt(document.getElementById('interest-years').value);
+                
+                if (isNaN(principal) || isNaN(rate) || isNaN(years)) {
+                    alert('Por favor ingresa valores válidos');
+                    return;
+                }
+                
+                const amount = principal * Math.pow(1 + (rate / 100), years);
+                const interest = amount - principal;
+                
+                document.getElementById('interest-output').innerHTML = `
+                    Capital inicial: $${principal.toFixed(2)}<br>
+                    Intereses ganados: $${interest.toFixed(2)}<br>
+                    Monto final: $${amount.toFixed(2)}<br>
+                    Tasa anual: ${rate.toFixed(2)}%
+                `;
+                
+                document.getElementById('interest-result').classList.remove('hidden');
+                
+                // Add to history
+                addToHistory('Interés Compuesto', principal, amount);
+            });
+            
+            // Investment Calculator
+            document.getElementById('calculate-investment').addEventListener('click', () => {
+                const monthly = parseFloat(document.getElementById('investment-monthly').value);
+                const returnRate = parseFloat(document.getElementById('investment-return').value);
+                const years = parseInt(document.getElementById('investment-years').value);
+                
+                if (isNaN(monthly) || isNaN(returnRate) || isNaN(years)) {
+                    alert('Por favor ingresa valores válidos');
+                    return;
+                }
+                
+                const months = years * 12;
+                const monthlyRate = returnRate / 1200;
+                let total = 0;
+                
+                for (let i = 0; i < months; i++) {
+                    total = (total + monthly) * (1 + monthlyRate);
+                }
+                
+                const invested = monthly * months;
+                const earnings = total - invested;
+                
+                document.getElementById('investment-output').innerHTML = `
+                    Aportación mensual: $${monthly.toFixed(2)}<br>
+                    Total invertido: $${invested.toFixed(2)}<br>
+                    Ganancias: $${earnings.toFixed(2)}<br>
+                    Valor futuro: $${total.toFixed(2)}<br>
+                    Rendimiento anual: ${returnRate.toFixed(2)}%
+                `;
+                
+                document.getElementById('investment-result').classList.remove('hidden');
+                
+                // Add to history
+                addToHistory('Inversión Mensual', invested, total);
+            });
+        }
+        
+        // Simulation History
+        function addToHistory(type, amount, result) {
+            const historyTable = document.getElementById('simulation-history');
+            const now = new Date();
+            const dateStr = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+            
+            const row = document.createElement('tr');
+            row.className = 'border-b border-green-900 hover:bg-green-900 hover:bg-opacity-20';
+            row.innerHTML = `
+                <td class="py-2 px-4">${dateStr}</td>
+                <td class="py-2 px-4">${type}</td>
+                <td class="py-2 px-4">$${amount.toFixed(2)}</td>
+                <td class="py-2 px-4">$${result.toFixed(2)}</td>
+            `;
+            
+            if (historyTable.children.length === 0 || historyTable.children[0].textContent.includes('No hay')) {
+                historyTable.innerHTML = '';
+            }
+            
+            historyTable.prepend(row);
+        }
+        
+        // Task Manager
+        function setupTaskManager() {
+            let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            
+            // Add new task
+            document.getElementById('add-task').addEventListener('click', () => {
+                const title = document.getElementById('task-title').value.trim();
+                const description = document.getElementById('task-description').value.trim();
+                const deadline = document.getElementById('task-deadline').value;
+                const priority = document.getElementById('task-priority').value;
+                
+                if (!title) {
+                    alert('El título es requerido');
+                    return;
+                }
+                
+                const newTask = {
+                    id: Date.now(),
+                    title,
+                    description,
+                    deadline,
+                    priority,
+                    completed: false,
+                    createdAt: new Date().toISOString()
+                };
+                
+                tasks.push(newTask);
+                saveTasks();
+                renderTasks();
+                resetTaskForm();
+            });
+            
+            // Task filters
+            document.getElementById('filter-all').addEventListener('click', () => {
+                setActiveFilter('filter-all');
+                renderTasks();
+            });
+            
+            document.getElementById('filter-pending').addEventListener('click', () => {
+                setActiveFilter('filter-pending');
+                renderTasks('pending');
+            });
+            
+            document.getElementById('filter-completed').addEventListener('click', () => {
+                setActiveFilter('filter-completed');
+                renderTasks('completed');
+            });
+            
+            // Save tasks to localStorage
+            function saveTasks() {
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                updateTaskStats();
+            }
+            
+            // Render tasks based on filter
+            function renderTasks(filter = 'all') {
+                const taskList = document.getElementById('task-list');
+                taskList.innerHTML = '';
+                
+                if (tasks.length === 0) {
+                    taskList.innerHTML = '<p class="text-gray-500 text-center py-10">No hay tareas registradas</p>';
+                    return;
+                }
+                
+                let filteredTasks = tasks;
+                
+                if (filter === 'pending') {
+                    filteredTasks = tasks.filter(task => !task.completed);
+                } else if (filter === 'completed') {
+                    filteredTasks = tasks.filter(task => task.completed);
+                }
+                
+                if (filteredTasks.length === 0) {
+                    const message = filter === 'all' ? 'No hay tareas registradas' : 
+                                    filter === 'pending' ? 'No hay tareas pendientes' : 'No hay tareas completadas';
+                    taskList.innerHTML = `<p class="text-gray-500 text-center py-10">${message}</p>`;
+                    return;
+                }
+                
+                filteredTasks.sort((a, b) => {
+                    if (a.priority === 'high' && b.priority !== 'high') return -1;
+                    if (a.priority !== 'high' && b.priority === 'high') return 1;
+                    return new Date(a.deadline) - new Date(b.deadline);
+                }).forEach(task => {
+                    const taskElement = document.createElement('div');
+                    taskElement.className = `neon-border p-3 rounded-lg ${task.completed ? 'bg-green-900 bg-opacity-10' : ''}`;
+                    
+                    const priorityColor = task.priority === 'high' ? 'text-red-400' : 
+                                         task.priority === 'medium' ? 'text-yellow-400' : 'text-gray-400';
+                    
+                    taskElement.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center">
+                                <input type="checkbox" ${task.completed ? 'checked' : ''} 
+                                    data-id="${task.id}" 
+                                    class="mr-3 h-5 w-5 rounded border-green-400 bg-black text-green-500 focus:ring-green-500">
+                                <div>
+                                    <h4 class="font-medium ${task.completed ? 'line-through text-gray-500' : ''}">${task.title}</h4>
+                                    ${task.description ? `<p class="text-sm mt-1 text-gray-400">${task.description}</p>` : ''}
+                                </div>
+                            </div>
+                            <span class="text-xs ${priorityColor}">
+                                <i class="fas fa-${task.priority === 'high' ? 'exclamation-circle' : task.priority === 'medium' ? 'info-circle' : 'circle'}"></i>
+                            </span>
+                        </div>
+                        ${task.deadline ? `
+                        <div class="mt-2 flex justify-between items-center text-xs">
+                            <span class="text-gray-500">
+                                <i class="far fa-clock mr-1"></i>
+                                ${formatDate(task.deadline)}
+                            </span>
+                            <button data-id="${task.id}" class="text-red-400 hover:text-red-300">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                        ` : ''}
+                    `;
+                    
+                    taskList.appendChild(taskElement);
+                });
+                
+                // Add event listeners to checkboxes
+                document.querySelectorAll('#task-list input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.addEventListener('change', function() {
+                        const taskId = parseInt(this.getAttribute('data-id'));
+                        const task = tasks.find(t => t.id === taskId);
+                        if (task) {
+                            task.completed = this.checked;
+                            saveTasks();
+                            renderTasks();
+                        }
+                    });
+                });
+                
+                // Add event listeners to delete buttons
+                document.querySelectorAll('#task-list button').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const taskId = parseInt(this.getAttribute('data-id'));
+                        tasks = tasks.filter(t => t.id !== taskId);
+                        saveTasks();
+                        renderTasks();
+                    });
+                });
+            }
+            
+            // Set active filter
+            function setActiveFilter(activeId) {
+                document.querySelectorAll('.neon-button').forEach(btn => {
+                    btn.classList.remove('active-filter');
+                });
+                document.getElementById(activeId).classList.add('active-filter');
+            }
+            
+            // Reset task form
+            function resetTaskForm() {
+                document.getElementById('task-title').value = '';
+                document.getElementById('task-description').value = '';
+                document.getElementById('task-deadline').value = '';
+                document.getElementById('task-priority').value = 'medium';
+            }
+            
+            // Format date
+            function formatDate(dateString) {
+                const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                return new Date(dateString).toLocaleDateString(undefined, options);
+            }
+            
+            // Update task statistics
+            function updateTaskStats() {
+                document.getElementById('total-tasks').textContent = tasks.length;
+                document.getElementById('completed-tasks').textContent = tasks.filter(t => t.completed).length;
+                document.getElementById('pending-tasks').textContent = tasks.filter(t => !t.completed).length;
+                document.getElementById('high-priority-tasks').textContent = tasks.filter(t => t.priority === 'high').length;
+            }
+            
+            // Initialize
+            renderTasks();
+            updateTaskStats();
+        }
+        
+        // Slides Navigation
+        function setupSlides() {
+            const totalSlides = 6;
+            let currentSlide = 1;
+            
+            document.getElementById('total-slides').textContent = totalSlides;
+            updateSlideCounter();
+            
+            // Next slide
+            document.getElementById('next-slide').addEventListener('click', () => {
+                if (currentSlide < totalSlides) {
+                    currentSlide++;
+                    updateSlideCounter();
+                }
+            });
+            
+            // Previous slide
+            document.getElementById('prev-slide').addEventListener('click', () => {
+                if (currentSlide > 1) {
+                    currentSlide--;
+                    updateSlideCounter();
+                }
+            });
+            
+            // Update slide counter
+            function updateSlideCounter() {
+                document.getElementById('current-slide').textContent = currentSlide;
+            }
+        }
+        
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            createMatrixRain();
+            setupTabs();
+            setupCalculators();
+            setupTaskManager();
+            setupSlides();
+            
+            // Add some initial data for demonstration
+            if (!localStorage.getItem('tasks')) {
+                const demoTasks = [
+                    {
+                        id: 1,
+                        title: 'Revisar estado de inversiones',
+                        description: 'Verificar rendimiento de portafolio y rebalancear si es necesario',
+                        deadline: '2023-12-15',
+                        priority: 'high',
+                        completed: false,
+                        createdAt: '2023-11-01T10:00:00Z'
+                    },
+                    {
+                        id: 2,
+                        title: 'Pagar impuestos prediales',
+                        description: 'Vencimiento el 20 de diciembre',
+                        deadline: '2023-12-20',
+                        priority: 'medium',
+                        completed: false,
+                        createdAt: '2023-11-05T14:30:00Z'
+                    },
+                    {
+                        id: 3,
+                        title: 'Investigar sobre fondos indexados',
+                        description: 'Comparar rendimientos y comisiones',
+                        deadline: '2023-11-30',
+                        priority: 'low',
+                        completed: true,
+                        createdAt: '2023-10-15T09:15:00Z'
+                    }
+                ];
+                
+                localStorage.setItem('tasks', JSON.stringify(demoTasks));
+                
+                // Also add some simulation history
+                const history = [
+                    { type: 'CETES', amount: 10000, result: 10250, date: '2023-11-10T14:25:00Z' },
+                    { type: 'Interés Compuesto', amount: 5000, result: 7346, date: '2023-11-08T11:20:00Z' },
+                    { type: 'Inversión Mensual', amount: 24000, result: 31500, date: '2023-11-05T16:45:00Z' }
+                ];
+                
+                history.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.className = 'border-b border-green-900 hover:bg-green-900 hover:bg-opacity-20';
+                    row.innerHTML = `
+                        <td class="py-2 px-4">${new Date(item.date).toLocaleString()}</td>
+                        <td class="py-2 px-4">${item.type}</td>
+                        <td class="py-2 px-4">$${item.amount.toFixed(2)}</td>
+                        <td class="py-2 px-4">$${item.result.toFixed(2)}</td>
+                    `;
+                    document.getElementById('simulation-history').appendChild(row);
+                });
+            }
+        });
+    </script>
 </body>
 </html>
