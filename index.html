@@ -3,36 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Futuristic Financial Dashboard</title>
+    <title>Dashboard Financiero</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&display=swap');
-        
         :root {
             --primary: #4effb6;
-            --bg-main: #121212;
-            --bg-glass: rgba(255, 255, 255, 0.07);
+            --background: #121212;
+            --glass: rgba(255, 255, 255, 0.07);
             --border: rgba(255, 255, 255, 0.2);
             --text: #f0f0f0;
             --accent: #15f5c0;
             --gradient: linear-gradient(45deg, #4effb6 0%, #15f5c0 100%);
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', sans-serif;
         }
-        
+
         body {
-            background-color: var(--bg-main);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background);
             color: var(--text);
-            min-height: 100vh;
             overflow-x: hidden;
         }
-        
+
         #matrix {
             position: fixed;
             top: 0;
@@ -40,28 +40,26 @@
             width: 100vw;
             height: 100vh;
             z-index: -1;
-            opacity: 0.15;
+            opacity: 0.5;
         }
-        
+
         .glass-card {
-            background: var(--bg-glass);
+            background: var(--glass);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             border: 1px solid var(--border);
             border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
-        
+
         .neon-text {
             text-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary);
         }
-        
+
         .tab-button {
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
-        
+
         .tab-button::after {
             content: '';
             position: absolute;
@@ -72,32 +70,56 @@
             background: var(--gradient);
             transition: width 0.3s ease;
         }
-        
+
         .tab-button.active::after {
             width: 100%;
         }
-        
+
+
+
+        /* Formato para Diapositivas que giran */
         .flip-card {
             perspective: 1000px;
         }
-        
+
         .flip-card-inner {
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-        
-        .flip-card:hover .flip-card-inner {
+              position: relative;
+              width: 100%;
+              height: 100%;
+              transition: transform 0.6s;
+              transform-style: preserve-3d;
+            }
+        .flip-card.flipped .flip-card-inner {
             transform: rotateY(180deg);
         }
-        
-        .flip-card-front, .flip-card-back {
-            backface-visibility: hidden;
-        }
-        
+
+        .flip-card-front,
         .flip-card-back {
-            transform: rotateY(180deg);
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          backface-visibility: hidden;
+          border-radius: inherit;
         }
-        
+        /* La cara trasera se rota 180º para que se oculte inicialmente */
+        .flip-card-back {
+          transform: rotateY(180deg);
+        }
+
+        .footer-link {
+            color: var(--text);
+            transition: color 0.3s ease;
+          }
+          .footer-link:hover {
+            color: var(--primary);
+          }
+
+
+
+
+
         input[type="number"], input[type="text"], select {
             background: rgba(0, 0, 0, 0.2);
             border: 1px solid var(--border);
@@ -106,13 +128,15 @@
             border-radius: 6px;
             transition: all 0.3s;
         }
-        
+
         input[type="number"]:focus, input[type="text"]:focus, select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 2px rgba(78, 255, 182, 0.2);
         }
-        
+
+
+
         .btn-primary {
             background: var(--gradient);
             color: #121212;
@@ -123,20 +147,20 @@
             border: none;
             cursor: pointer;
         }
-        
+
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(21, 245, 192, 0.4);
         }
-        
+
         .result-card {
             border-left: 4px solid var(--primary);
         }
-        
+
         .glow {
             animation: glow 2s infinite alternate;
         }
-        
+
         @keyframes glow {
             from {
                 box-shadow: 0 0 5px rgba(78, 255, 182, 0.5);
@@ -145,11 +169,11 @@
                 box-shadow: 0 0 20px rgba(78, 255, 182, 0.8);
             }
         }
-        
+
         .pulse {
             animation: pulse 2s infinite;
         }
-        
+
         @keyframes pulse {
             0% {
                 transform: scale(1);
@@ -161,48 +185,74 @@
                 transform: scale(1);
             }
         }
+
+
+        .result-box {
+            border-left: 4px solid var(--primary);
+        }
+
+        .key-concept {
+            background: rgba(78, 255, 182, 0.1);
+            border-left: 3px solid var(--primary);
+        }
     </style>
 </head>
+  <!-- FIN DE ESTILO -->
+
+
+
+
+  <!-- INICIO DE CUERPO DEL PROGRAMA -->
 <body>
+
     <canvas id="matrix"></canvas>
-    
-    <div class="container mx-auto px-4 py-8">
-        <header class="flex flex-col items-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-center neon-text">
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#4effb6] to-[#15f5c0]">
-                    Futuristic Financial Dashboard
-                </span>
-            </h1>
-            <div class="glass-card p-2 rounded-full">
-                <div class="flex space-x-1">
-                    <button class="tab-button active px-6 py-2 rounded-full" data-tab="introduccion">
-                        <i class="fas fa-info-circle mr-2"></i>Introducción
-                    </button>
-                    <button class="tab-button px-6 py-2 rounded-full" data-tab="aplicaciones">
-                        <i class="fas fa-calculator mr-2"></i>Aplicaciones
-                    </button>
-                    <button class="tab-button px-6 py-2 rounded-full" data-tab="tareas">
-                        <i class="fas fa-tasks mr-2"></i>Tareas
-                    </button>
-                    <button class="tab-button px-6 py-2 rounded-full" data-tab="diapositivas">
-                        <i class="fas fa-images mr-2"></i>Diapositivas
-                    </button>
-                </div>
-            </div>
-        </header>
-        
-        <main>
-            <!-- Introducción Tab -->
-            <div id="introduccion" class="tab-content active">
-                <div class="glass-card p-8 mb-8">
-                    <h2 class="text-3xl font-bold mb-6 text-[#4effb6]">Introducción al Mundo Financiero</h2>
-                    <p class="mb-6 leading-relaxed">
-                        El mundo financiero es un ecosistema complejo donde interactúan individuos, empresas y gobiernos a través de instrumentos y mercados que facilitan el flujo de capital. En este entorno, conceptos como inversión, riesgo, rendimiento y liquidez se convierten en pilares fundamentales para la toma de decisiones.
-                    </p>
-                    <p class="mb-6 leading-relaxed">
-                        Los mercados financieros permiten la transferencia de recursos entre ahorradores e inversores, creando oportunidades para generar riqueza a través de instrumentos como bonos, acciones, fondos de inversión y derivados. Comprender estos mecanismos es esencial para una gestión financiera eficiente.
-                    </p>
-                    
+
+<!--BARRA DE OPCIONES E INICIO ------------------------------------------------------------------------------------------------>
+<div class="container mx-auto px-4 py-8">
+  <!-- Header -->
+  <header class="flex flex-col items-center mb-12">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4 text-center neon-text">
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#4effb6] to-[#15f5c0]">
+        Dashboard Financiero
+      </span>
+    </h1>
+    <p class="text-lg opacity-80 mb-4">
+      Herramientas para entender y dominar el mundo de las finanzas
+    </p>
+    <!-- Navegación en pestañas -->
+    <div class="glass-card p-2 rounded-full">
+      <div class="flex space-x-1">
+        <button onclick="openTab('introduccion')" class="tab-button active px-6 py-2 rounded-full" data-tab="introduccion">
+          <i class="fas fa-info-circle mr-2"></i>
+          Introducción
+        </button>
+        <button onclick="openTab('aplicaciones')" class="tab-button px-6 py-2 rounded-full" data-tab="aplicaciones">
+          <i class="fas fa-calculator mr-2"></i>
+          Aplicaciones
+        </button>
+        <button onclick="openTab('tareas')" class="tab-button px-6 py-2 rounded-full" data-tab="tareas">
+          <i class="fas fa-tasks mr-2"></i>
+          Tareas
+        </button>
+        <button onclick="openTab('diapositivas')" class="tab-button px-6 py-2 rounded-full" data-tab="diapositivas">
+          <i class="fas fa-images mr-2"></i>
+          Diapositivas
+        </button>
+      </div>
+    </div>
+  </header>
+
+
+
+        <!-- Tab Content -->
+        <div class="glass-card p-8 mb-8">
+
+<!-- INTRODUCCIÓN TAB ------------------------------------------------------------------------------------------------>
+            <div id="introduccion" class="tab-content">
+                <h2 class="text-3xl font-bold mb-6 text-[#4effb6]">Introducción al Mundo Financiero</h2>
+                <p class="mb-6 leading-relaxed">El mundo financiero es un ecosistema complejo donde interactúan individuos, empresas y gobiernos a través de instrumentos y mercados que facilitan el flujo de capital. Comprender sus fundamentos es esencial para tomar decisiones informadas sobre inversiones, ahorro y gestión de riesgos.</p>
+                <p class="mb-6 leading-relaxed">El mundo financiero es un ecosistema complejo donde interactúan individuos, empresas y gobiernos a través de instrumentos y mercados que facilitan el flujo de capital. Comprender sus fundamentos es esencial para tomar decisiones informadas sobre inversiones, ahorro y gestión de riesgos.</p>
+
                     <div class="glass-card p-6 mt-8 border border-[#4effb6]/30">
                         <h3 class="text-2xl font-bold mb-4 text-[#15f5c0]">Conceptos Clave</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -244,7 +294,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="mt-8">
                         <h3 class="text-2xl font-bold mb-4 text-[#15f5c0]">Instrumentos Financieros Básicos</h3>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -277,15 +327,19 @@
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
+
+
+
+
+
+
+<!-- Aplicaciones Tab ------------------------------------------------------------------------------------------------>
             
-            <!-- Aplicaciones Tab -->
             <div id="aplicaciones" class="tab-content hidden">
-                <div class="glass-card p-8 mb-8">
-                    <h2 class="text-3xl font-bold mb-6 text-[#4effb6]">Simulador Financiero</h2>
-                    
-                    <!-- Simulador de CETES -->
+                <h2 class="text-3xl font-bold mb-6 text-[#4effb6]">Herramientas Financieras</h2>
+
+                <!-- Simulador de CETES -->
                     <div class="mb-12">
                         <div class="flex items-center mb-6">
                             <div class="bg-[#4effb6] text-[#121212] rounded-lg w-12 h-12 flex items-center justify-center mr-4">
@@ -293,833 +347,772 @@
                             </div>
                             <h3 class="text-2xl font-bold">Simulador de CETES</h3>
                         </div>
-                        
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                            <div class="lg:col-span-2">
-                                <div class="glass-card p-6 mb-6">
-                                    <div class="flex items-center mb-4">
-                                        <input type="checkbox" id="ventaAnticipada" class="mr-2 h-5 w-5">
-                                        <label for="ventaAnticipada" class="font-medium">Simular venta anticipada</label>
-                                    </div>
-                                    
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                        <div>
-                                            <label for="montoInversion" class="block mb-2">Monto a invertir ($)</label>
-                                            <input type="number" id="montoInversion" class="w-full" placeholder="Ej. 10000" min="0">
-                                        </div>
-                                        <div>
-                                            <label for="cantidadCetes" class="block mb-2">Cantidad de CETES</label>
-                                            <input type="number" id="cantidadCetes" class="w-full" placeholder="Ej. 100" min="0">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                        <div>
-                                            <label for="plazoInversion" class="block mb-2">Plazo de inversión</label>
-                                            <select id="plazoInversion" class="w-full">
-                                                <option value="28">28 días</option>
-                                                <option value="91">91 días</option>
-                                                <option value="182">182 días</option>
-                                                <option value="365">365 días</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label for="tasaDescuento" class="block mb-2">Tasa de descuento (%)</label>
-                                            <input type="number" id="tasaDescuento" class="w-full" placeholder="Ej. 8.5" step="0.01" min="0">
-                                        </div>
-                                    </div>
-                                    
-                                    <div id="ventaAnticipadaFields" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                                        <div>
-                                            <label for="plazoVenta" class="block mb-2">Plazo al vender (días)</label>
-                                            <input type="number" id="plazoVenta" class="w-full" placeholder="Ej. 15" min="1">
-                                        </div>
-                                        <div>
-                                            <label for="tasaActual" class="block mb-2">Tasa de descuento actual (%)</label>
-                                            <input type="number" id="tasaActual" class="w-full" placeholder="Ej. 9.0" step="0.01" min="0">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                        <div>
-                                            <label for="inflacion" class="block mb-2">Inflación esperada (%)</label>
-                                            <input type="number" id="inflacion" class="w-full" placeholder="Ej. 4.5" step="0.01" min="0">
-                                        </div>
-                                    </div>
-                                    
-                                    <button id="calcularCetes" class="btn-primary w-full md:w-auto">
-                                        <i class="fas fa-calculator mr-2"></i>Calcular
-                                    </button>
+
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="glass-card p-5 rounded-lg">
+
+                            <div class="mb-4">
+                                <label class="block mb-2">Cantidad a invertir ($)</label>
+                                <input type="number" id="ceteInversion" class="w-full" placeholder="Ej. $1000" step="100">
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block mb-2">Plazo del CETE (días)</label>
+                                <select id="cetePlazo" class="w-full">
+                                    <option value="28">28 días</option>
+                                    <option value="91">91 días</option>
+                                    <option value="182">182 días</option>
+                                    <option value="365">365 días</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block mb-2">Tasa de descuento (%)</label>
+                                <input type="number" id="ceteTasa" class="w-full" placeholder="Ej. 11.35%" step="0.01">
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block mb-2">Inflación (%)</label>
+                                <input type="number" id="inflacionInput" class="w-full" placeholder="Ej. 3.77%" step="100">
+                            </div>
+
+                            <div class="mb-4 flex items-center">
+                                <input type="checkbox" id="ventaAnticipada" class="mr-2">
+                                <label for="ventaAnticipada">Simular venta anticipada</label>
+                            </div>
+
+                            <div id="ventaAnticipadaFields" class="hidden space-y-4">
+                                <div>
+                                    <label class="block mb-2">Plazo transcurrido (días)</label>
+                                    <input type="number" id="plazoTranscurrido" class="w-full" placeholder="Ej. 15">
                                 </div>
-                                
-                                <div id="resultadosCetes" class="hidden glass-card p-6">
-                                    <h4 class="text-xl font-bold mb-4 text-[#15f5c0]">Resultados de la Inversión</h4>
-                                    
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                                        <div class="result-card p-4">
-                                            <p class="text-sm opacity-80">Precio de compra por CETE</p>
-                                            <p class="text-xl font-bold" id="precioCompra">$0.00</p>
-                                        </div>
-                                        <div class="result-card p-4">
-                                            <p class="text-sm opacity-80">Monto invertido</p>
-                                            <p class="text-xl font-bold" id="montoInvertido">$0.00</p>
-                                        </div>
-                                        <div class="result-card p-4">
-                                            <p class="text-sm opacity-80">Remanente</p>
-                                            <p class="text-xl font-bold" id="remanente">$0.00</p>
-                                        </div>
-                                        <div class="result-card p-4">
-                                            <p class="text-sm opacity-80">Interés neto</p>
-                                            <p class="text-xl font-bold" id="interesNeto">$0.00</p>
-                                        </div>
-                                        <div class="result-card p-4">
-                                            <p class="text-sm opacity-80">ISR (5%)</p>
-                                            <p class="text-xl font-bold" id="isr">$0.00</p>
-                                        </div>
-                                        <div class="result-card p-4">
-                                            <p class="text-sm opacity-80">Monto neto final</p>
-                                            <p class="text-xl font-bold" id="montoNeto">$0.00</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <h4 class="text-xl font-bold mb-4 text-[#15f5c0]">Rendimientos</h4>
-                                    
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <div class="result-card p-4">
-                                            <p class="text-sm opacity-80">Rendimiento anualizado</p>
-                                            <p class="text-xl font-bold" id="rendAnualizado">0.00%</p>
-                                        </div>
-                                        <div class="result-card p-4">
-                                            <p class="text-sm opacity-80">Rendimiento neto anualizado</p>
-                                            <p class="text-xl font-bold" id="rendNetoAnual">0.00%</p>
-                                        </div>
-                                        <div class="result-card p-4">
-                                            <p class="text-sm opacity-80">Rendimiento real</p>
-                                            <p class="text-xl font-bold" id="rendReal">0.00%</p>
-                                        </div>
-                                    </div>
+
+                                <div>
+                                    <label class="block mb-2">Tasa de descuento actual (%)</label>
+                                    <input type="number" id="tasaActual" class="w-full" placeholder="Ej. 10.3" step="0.01">
                                 </div>
                             </div>
-                            
-                            <div class="glass-card p-6">
-                                <h4 class="text-lg font-bold mb-4 text-[#15f5c0]">Información sobre CETES</h4>
-                                <p class="text-sm mb-4">Los CETES son instrumentos de deuda gubernamental emitidos por el gobierno mexicano a través de la Secretaría de Hacienda y Crédito Público.</p>
-                                
-                                <div class="space-y-3">
-                                    <div class="flex items-start">
-                                        <div class="bg-[#4effb6] text-[#121212] rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0 text-xs">
-                                            <i class="fas fa-check"></i>
-                                        </div>
-                                        <p class="text-sm">Valor nominal: $10 MXN</p>
-                                    </div>
-                                    <div class="flex items-start">
-                                        <div class="bg-[#4effb6] text-[#121212] rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0 text-xs">
-                                            <i class="fas fa-check"></i>
-                                        </div>
-                                        <p class="text-sm">Se colocan a descuento (por debajo de su valor nominal)</p>
-                                    </div>
-                                    <div class="flex items-start">
-                                        <div class="bg-[#4effb6] text-[#121212] rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0 text-xs">
-                                            <i class="fas fa-check"></i>
-                                        </div>
-                                        <p class="text-sm">Plazos: 28, 91, 182 y 365 días</p>
-                                    </div>
-                                    <div class="flex items-start">
-                                        <div class="bg-[#4effb6] text-[#121212] rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0 text-xs">
-                                            <i class="fas fa-check"></i>
-                                        </div>
-                                        <p class="text-sm">ISR: 5% sobre intereses</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="mt-6">
-                                    <h5 class="font-bold mb-2 text-[#4effb6]">Fórmulas clave:</h5>
-                                    <div class="text-xs bg-[#4effb6]/10 p-3 rounded-lg">
-                                        <p class="mb-1"><span class="font-bold">Precio:</span> P = 10 / (1 + (t*d/36000))</p>
-                                        <p class="mb-1"><span class="font-bold">Rendimiento periodo:</span> ((10 - P) / P) * 100</p>
-                                        <p><span class="font-bold">Rendimiento anualizado:</span> ((10 - P) / P) * (360/d) * 100</p>
-                                    </div>
-                                </div>
-                            </div>
+
+                            <button onclick="calcularCetes()" class="w-full py-2 rounded-lg bg-gradient-to-r from-[#4effb6] to-[#15f5c0] text-gray-900 font-bold mt-4">
+                                <i class="fas fa-calculator mr-2"></i>Calcular
+                            </button>
                         </div>
-                    </div>
-                    
-                    <!-- Simulador de Intereses -->
-                    <div>
-                        <div class="flex items-center mb-6">
-                            <div class="bg-[#4effb6] text-[#121212] rounded-lg w-12 h-12 flex items-center justify-center mr-4">
-                                <i class="fas fa-percentage text-xl"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold">Simulador de Intereses</h3>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                            <div class="lg:col-span-2">
-                                <div class="glass-card p-6 mb-6">
-                                    <div class="flex mb-6">
-                                        <button id="btnSimple" class="tab-button active px-6 py-2 rounded-l-lg" data-type="simple">
-                                            Interés Simple
-                                        </button>
-                                        <button id="btnCompuesto" class="tab-button px-6 py-2 rounded-r-lg" data-type="compuesto">
-                                            Interés Compuesto
-                                        </button>
-                                    </div>
-                                    
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                        <div>
-                                            <label for="capital" class="block mb-2">Capital inicial ($)</label>
-                                            <input type="number" id="capital" class="w-full" placeholder="Ej. 10000" min="0">
-                                        </div>
-                                        <div>
-                                            <label for="tasaInteres" class="block mb-2">Tasa de interés anual (%)</label>
-                                            <input type="number" id="tasaInteres" class="w-full" placeholder="Ej. 8.5" step="0.01" min="0">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                        <div>
-                                            <label for="plazoInteres" class="block mb-2">Plazo (años)</label>
-                                            <input type="number" id="plazoInteres" class="w-full" placeholder="Ej. 3" min="0" step="0.5">
-                                        </div>
-                                        <div id="frecuenciaContainer" class="hidden">
-                                            <label for="frecuencia" class="block mb-2">Frecuencia de capitalización</label>
-                                            <select id="frecuencia" class="w-full">
-                                                <option value="1">Anual</option>
-                                                <option value="2">Semestral</option>
-                                                <option value="4">Trimestral</option>
-                                                <option value="12">Mensual</option>
-                                                <option value="365">Diaria</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    
-                                    <button id="calcularInteres" class="btn-primary w-full md:w-auto">
-                                        <i class="fas fa-calculator mr-2"></i>Calcular
-                                    </button>
+
+                        <div id="cetesResults" class="hidden glass-card p-5 rounded-lg">
+                            <h4 class="font-bold text-lg mb-4 text-[#4effb6]">Resultados</h4>
+
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <p class="text-sm opacity-80">Precio de compra</p>
+                                    <p id="precioCompra" class="font-bold">$0.00</p>
                                 </div>
-                                
-                                <div id="resultadosInteres" class="hidden glass-card p-6">
-                                    <h4 class="text-xl font-bold mb-4 text-[#15f5c0]">Resultados</h4>
-                                    
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                                        <div class="result-card p-4">
-                                            <p class="text-sm opacity-80">Interés generado</p>
-                                            <p class="text-xl font-bold" id="interesGenerado">$0.00</p>
-                                        </div>
-                                        <div class="result-card p-4">
-                                            <p class="text-sm opacity-80">Monto final</p>
-                                            <p class="text-xl font-bold" id="montoFinal">$0.00</p>
-                                        </div>
-                                        <div class="result-card p-4">
-                                            <p class="text-sm opacity-80">Rendimiento total</p>
-                                            <p class="text-xl font-bold" id="rendimientoTotal">0.00%</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div id="tablaInteresContainer" class="hidden">
-                                        <h5 class="font-bold mb-3">Desglose por periodo</h5>
-                                        <div class="overflow-x-auto">
-                                            <table class="w-full text-sm">
-                                                <thead>
-                                                    <tr class="border-b border-[#4effb6]/30">
-                                                        <th class="text-left pb-2">Periodo</th>
-                                                        <th class="text-right pb-2">Capital</th>
-                                                        <th class="text-right pb-2">Interés</th>
-                                                        <th class="text-right pb-2">Total</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="tablaInteres" class="divide-y divide-[#4effb6]/10">
-                                                    <!-- Rows will be added dynamically -->
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                                <div>
+                                    <p class="text-sm opacity-80">Cantidad comprada</p>
+                                    <p id="cantidadComprada" class="font-bold">0</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm opacity-80">Monto invertido</p>
+                                    <p id="montoInvertido" class="font-bold">$0.00</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm opacity-80">Remanente</p>
+                                    <p id="remanente" class="font-bold">$0.00</p>
                                 </div>
                             </div>
-                            
-                            <div class="glass-card p-6">
-                                <h4 class="text-lg font-bold mb-4 text-[#15f5c0]">Información sobre Intereses</h4>
-                                <p class="text-sm mb-4">El interés es el costo del dinero en el tiempo, que puede calcularse de dos formas principales:</p>
-                                
-                                <div class="space-y-4">
-                                    <div>
-                                        <h5 class="font-bold mb-2 text-[#4effb6]">Interés Simple</h5>
-                                        <p class="text-xs mb-2">El interés se calcula siempre sobre el capital inicial.</p>
-                                        <div class="text-xs bg-[#4effb6]/10 p-3 rounded-lg">
-                                            <p class="font-bold">Fórmula:</p>
-                                            <p>I = C * i * t</p>
-                                            <p>M = C + I</p>
-                                            <p class="mt-2">Donde:</p>
-                                            <p>I = Interés</p>
-                                            <p>C = Capital inicial</p>
-                                            <p>i = Tasa de interés (decimal)</p>
-                                            <p>t = Tiempo</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div>
-                                        <h5 class="font-bold mb-2 text-[#4effb6]">Interés Compuesto</h5>
-                                        <p class="text-xs mb-2">El interés se calcula sobre el capital acumulado (capital + intereses).</p>
-                                        <div class="text-xs bg-[#4effb6]/10 p-3 rounded-lg">
-                                            <p class="font-bold">Fórmula:</p>
-                                            <p>M = C * (1 + i/n)^(n*t)</p>
-                                            <p class="mt-2">Donde:</p>
-                                            <p>M = Monto final</p>
-                                            <p>C = Capital inicial</p>
-                                            <p>i = Tasa de interés anual (decimal)</p>
-                                            <p>n = Frecuencia de capitalización por año</p>
-                                            <p>t = Tiempo en años</p>
-                                        </div>
-                                    </div>
+
+                            <div class="result-box p-3 mb-4">
+                                <div class="flex justify-between mb-1">
+                                    <span>Interés neto:</span>
+                                    <span id="interesNeto" class="font-bold">$0.00</span>
+                                </div>
+                                <div class="flex justify-between mb-1">
+                                    <span>ISR (5%):</span>
+                                    <span id="isr" class="font-bold">$0.00</span>
+                                </div>
+                                <div class="flex justify-between font-bold text-[#4effb6]">
+                                    <span>Monto neto final:</span>
+                                    <span id="montoNeto" class="font-bold">$0.00</span>
+                                </div>
+                            </div>
+
+                            <h5 class="font-bold mb-2 text-[#4effb6]">Rendimientos</h5>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-sm opacity-80">Rendimiento anualizado</p>
+                                    <p id="rendAnualizado" class="font-bold">0.00%</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm opacity-80">Rendimiento neto anualizado</p>
+                                    <p id="rendNetoAnualizado" class="font-bold">0.00%</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm opacity-80">Rendimiento real</p>
+                                    <p id="rendReal" class="font-bold">0.00%</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm opacity-80">Inflación considerada</p>
+                                    <p id="inflacion" class="font-bold">0.00%</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
+                <!-- Interest Simulator -->
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-percentage text-[#4effb6] text-xl mr-3"></i>
+                        <h3 class="text-xl font-semibold">Simulador de Intereses</h3>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="glass-card p-5 rounded-lg">
+                            <div class="mb-4">
+                                <label class="block mb-2">Tipo de interés</label>
+                                <select id="tipoInteres" class="w-full p-2 rounded">
+                                    <option value="simple">Interés Simple</option>
+                                    <option value="compuesto">Interés Compuesto</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block mb-2">Capital inicial ($)</label>
+                                <input type="number" id="capital" class="w-full p-2 rounded" step="100">
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block mb-2">Tasa de interés anual (%)</label>
+                                <input type="number" id="tasaInteres" class="w-full p-2 rounded" step="0.01">
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block mb-2">Plazo (años)</label>
+                                <input type="number" id="plazoInteres" class="w-full p-2 rounded" step="0.5">
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block mb-2">Período de capitalización</label>
+                                <select id="periodoCapitalizacion" class="w-full p-2 rounded">
+                                    <option value="1">Anual</option>
+                                    <option value="2">Semestral</option>
+                                    <option value="4">Trimestral</option>
+                                    <option value="12">Mensual</option>
+                                </select>
+                            </div>
+
+                            <button onclick="calcularInteres()" class="w-full py-2 rounded-lg bg-gradient-to-r from-[#4effb6] to-[#15f5c0] text-gray-900 font-bold mt-4">
+                                Calcular
+                            </button>
+                        </div>
+
+                        <div id="interesResults" class="hidden glass-card p-5 rounded-lg">
+                            <h4 class="font-bold text-lg mb-4 text-[#4effb6]">Resultados</h4>
+
+                            <div class="result-box p-3 mb-4">
+                                <div class="flex justify-between mb-1">
+                                    <span>Capital final:</span>
+                                    <span id="capitalFinal" class="font-bold">$0.00</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Intereses generados:</span>
+                                    <span id="interesesGenerados" class="font-bold text-[#4effb6]">$0.00</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <p class="font-bold mb-2">Desglose por período</p>
+                                <div class="overflow-auto max-h-60">
+                                    <table class="w-full text-sm">
+                                        <thead>
+                                            <tr class="border-b border-[#4effb6]">
+                                                <th class="text-left py-2">Año</th>
+                                                <th class="text-right py-2">Capital</th>
+                                                <th class="text-right py-2">Interés</th>
+                                                <th class="text-right py-2">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="desgloseInteres">
+                                            <!-- Results will be inserted here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-sm opacity-80">Tasa efectiva anual</p>
+                                    <p id="tasaEfectiva" class="font-bold">0.00%</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm opacity-80">Rendimiento real</p>
+                                    <p id="rendRealInteres" class="font-bold">0.00%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+          <!--FIN DE APLICACIONES--------->
             </div>
-            
+
+
+
+<!--INICIO DE TAREAS------------------------------------------------------------------------------------------l  -->
+
+
             <!-- Tareas Tab -->
             <div id="tareas" class="tab-content hidden">
-                <div class="glass-card p-8 mb-8">
-                    <h2 class="text-3xl font-bold mb-6 text-[#4effb6]">Tareas Financieras</h2>
-                    
-                    <div class="mb-6">
-                        <label for="selectTarea" class="block mb-2 font-medium">Selecciona una tarea:</label>
-                        <select id="selectTarea" class="w-full md:w-1/3">
-                            <option value="tarea1">Tarea 1: Cálculo de CETES</option>
-                            <option value="tarea2">Tarea 2: Interés Simple</option>
-                            <option value="tarea3">Tarea 3: Interés Compuesto</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Tarea 1 -->
-                    <div id="tarea1" class="tarea-content">
-                        <div class="glass-card p-6 mb-6">
-                            <h3 class="text-xl font-bold mb-4 text-[#15f5c0]">Tarea 1: Cálculo de CETES</h3>
-                            <div class="flex flex-col md:flex-row gap-6">
-                                <div class="md:w-1/3">
-                                    <img src="https://www.banxico.org.mx/multimedia/recursos/%7B5B5D5C3C-9B6B-4A9F-8F3E-7E5A5D5C3C9D%7D.PNG" alt="CETES" class="w-full h-auto rounded-lg">
-                                </div>
-                                <div class="md:w-2/3">
-                                    <p class="mb-4">Un inversionista adquiere CETES a 28 días con una tasa de descuento del 8.5%. El valor nominal de cada CETE es de $10 MXN y decide comprar 1,500 CETES con un monto de $14,850 MXN.</p>
-                                    <p class="mb-4">Calcule:</p>
-                                    <ol class="list-decimal pl-5 mb-4 space-y-2">
-                                        <li>El precio de compra por CETE</li>
-                                        <li>El monto total invertido</li>
-                                        <li>El interés neto que recibirá al vencimiento</li>
-                                        <li>El ISR a pagar (5% sobre intereses)</li>
-                                        <li>El monto neto que recibirá después de impuestos</li>
-                                        <li>El rendimiento anualizado de la inversión</li>
-                                    </ol>
-                                    
-                                    <div class="glass-card p-4 bg-[#4effb6]/10 border border-[#4effb6]/30">
-                                        <h4 class="font-bold mb-2 text-[#15f5c0]">Solución:</h4>
-                                        <div class="text-sm space-y-2">
-                                            <p>1. Precio por CETE = 10 / (1 + (8.5*28/36000)) = $9.934</p>
-                                            <p>2. Monto invertido = 1,500 * 9.934 = $14,901</p>
-                                            <p>3. Interés neto = (1,500 * 10) - 14,901 = $5,099</p>
-                                            <p>4. ISR = 5,099 * 0.05 = $254.95</p>
-                                            <p>5. Monto neto = 14,901 + (5,099 - 254.95) = $19,745.05</p>
-                                            <p>6. Rendimiento anualizado = ((10 - 9.934)/9.934) * (360/28) * 100 = 8.5%</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Tarea 2 -->
-                    <div id="tarea2" class="tarea-content hidden">
-                        <div class="glass-card p-6 mb-6">
-                            <h3 class="text-xl font-bold mb-4 text-[#15f5c0]">Tarea 2: Interés Simple</h3>
-                            <div class="flex flex-col md:flex-row gap-6">
-                                <div class="md:w-1/3">
-                                    <img src="https://www.economiasimple.net/wp-content/uploads/2023/03/interes-simple.jpg" alt="Interés Simple" class="w-full h-auto rounded-lg">
-                                </div>
-                                <div class="md:w-2/3">
-                                    <p class="mb-4">Una persona invierte $50,000 MXN en un instrumento de interés simple con una tasa anual del 7.5% por un plazo de 3 años.</p>
-                                    <p class="mb-4">Calcule:</p>
-                                    <ol class="list-decimal pl-5 mb-4 space-y-2">
-                                        <li>El interés generado cada año</li>
-                                        <li>El interés total al final del periodo</li>
-                                        <li>El monto final que recibirá</li>
-                                        <li>El rendimiento total de la inversión</li>
-                                    </ol>
-                                    
-                                    <div class="glass-card p-4 bg-[#4effb6]/10 border border-[#4effb6]/30">
-                                        <h4 class="font-bold mb-2 text-[#15f5c0]">Solución:</h4>
-                                        <div class="text-sm space-y-2">
-                                            <p>1. Interés anual = 50,000 * 0.075 = $3,750</p>
-                                            <p>2. Interés total = 3,750 * 3 = $11,250</p>
-                                            <p>3. Monto final = 50,000 + 11,250 = $61,250</p>
-                                            <p>4. Rendimiento total = (11,250 / 50,000) * 100 = 22.5%</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Tarea 3 -->
-                    <div id="tarea3" class="tarea-content hidden">
-                        <div class="glass-card p-6 mb-6">
-                            <h3 class="text-xl font-bold mb-4 text-[#15f5c0]">Tarea 3: Interés Compuesto</h3>
-                            <div class="flex flex-col md:flex-row gap-6">
-                                <div class="md:w-1/3">
-                                    <img src="https://www.economiasimple.net/wp-content/uploads/2023/03/interes-compuesto.jpg" alt="Interés Compuesto" class="w-full h-auto rounded-lg">
-                                </div>
-                                <div class="md:w-2/3">
-                                    <p class="mb-4">Un inversionista coloca $75,000 MXN en una cuenta que paga interés compuesto del 6% anual capitalizable trimestralmente por un periodo de 5 años.</p>
-                                    <p class="mb-4">Calcule:</p>
-                                    <ol class="list-decimal pl-5 mb-4 space-y-2">
-                                        <li>La tasa por periodo de capitalización</li>
-                                        <li>El número total de periodos</li>
-                                        <li>El monto final de la inversión</li>
-                                        <li>El interés total generado</li>
-                                        <li>El rendimiento total de la inversión</li>
-                                    </ol>
-                                    
-                                    <div class="glass-card p-4 bg-[#4effb6]/10 border border-[#4effb6]/30">
-                                        <h4 class="font-bold mb-2 text-[#15f5c0]">Solución:</h4>
-                                        <div class="text-sm space-y-2">
-                                            <p>1. Tasa por periodo = 6% / 4 = 1.5% trimestral</p>
-                                            <p>2. Número de periodos = 5 * 4 = 20 trimestres</p>
-                                            <p>3. Monto final = 75,000 * (1 + 0.015)^20 = $101,007.14</p>
-                                            <p>4. Interés total = 101,007.14 - 75,000 = $26,007.14</p>
-                                            <p>5. Rendimiento total = (26,007.14 / 75,000) * 100 = 34.68%</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <h2 class="text-3xl font-bold mb-6 text-[#4effb6]">Tareas Financieras</h2>
+
+                <div class="mb-6">
+                    <label class="block mb-2 text-white">Seleccionar tarea:</label>
+                    <select id="selectTarea" onchange="cambiarTarea()"
+                        class="w-full p-2 rounded bg-gray-600 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="all" selected>Mostrar Todas</option>
+                        <option value="1">Tarea 1: Cálculo de CETES</option>
+                        <option value="2">Tarea 2: Interés Simple</option>
+                        <option value="3">Tarea 3: Interés Compuesto</option>
+                    </select>
                 </div>
-            </div>
+
+
+                <!-- Tarea 1 -->
+                <div id="tarea1" class="tarea-content">
+                  <div class="glass-card p-6 mb-6">
+                    <h3 class="text-xl font-semibold mb-4 text-[#4effb6]">Detalle de la Tarea: Cálculo de CETES</h3>
+
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                      <div>
+                        <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="CETES" class="w-full rounded-lg mb-4">
+                        <p class="text-sm opacity-80 text-center">Instrumentos de deuda gubernamental</p>
+                      </div>
+
+                      <div>
+                        <p class="mb-4">Un inversionista adquiere CETES a 182 días con una tasa de descuento del 8.5%. Considerando que invierte $50,000:</p>
+                        <ol class="list-decimal pl-5 space-y-2 mb-4">
+                          <li>Calcular el precio de compra del CETE</li>
+                          <li>Determinar la cantidad de títulos que puede adquirir</li>
+                          <li>Calcular el monto total invertido y el remanente</li>
+                          <li>Determinar el interés neto al vencimiento</li>
+                          <li>Calcular el ISR (5%) y el monto neto final</li>
+                          <li>Determinar el rendimiento anualizado y el rendimiento real considerando una inflación del 4.5%</li>
+                        </ol>
+                      </div>
+                    </div>
+
+                    <div class="glass-card p-4 bg-[#4effb6]/10 border border-[#4effb6]/30">
+                      <h4 class="font-bold mb-2 text-[#15f5c0]">Solución</h4>
+
+                      <div class="text-sm space-y-2">
+                        <div>
+                          <p><strong>1. Precio de compra:</strong><br>
+                          P = 10 / (1 + (0.085 * 182/360)) = $9.5865</p>
+
+                          <p class="mt-2"><strong>2. Cantidad de títulos:</strong><br>
+                          50,000 / 9.5865 = 5,215.68 → 5,215 títulos</p>
+
+                          <p class="mt-2"><strong>3. Monto invertido:</strong><br>
+                          5,215 * 9.5865 = $49,999.60<br>
+                          Remanente: $0.40</p>
+                        </div>
+
+                        <div>
+                          <p><strong>4. Interés neto:</strong><br>
+                          (5,215 * 10) - 49,999.60 = $5,150.40</p>
+
+                          <p class="mt-2"><strong>5. ISR y monto neto:</strong><br>
+                          ISR: 5,150.40 * 0.05 = $257.52<br>
+                          Neto: 5,150.40 - 257.52 = $4,892.88</p>
+
+                          <p class="mt-2"><strong>6. Rendimientos:</strong><br>
+                          Anualizado: ((52,150 / 49,999.60)^(365/182) - 1) * 100 = 8.5%<br>
+                          Real: (1.085 / 1.045 - 1) * 100 = 3.83%</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tarea 2 -->
+                <div id="tarea2" class="tarea-content">
+                  <div class="glass-card p-6 mb-6">
+                    <h3 class="text-xl font-bold mb-4 text-[#15f5c0]">Detalle de la Tarea: Cálculo de CETES</h3>
+
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                      <div>
+                        <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="CETES" class="w-full rounded-lg mb-4">
+                        <p class="text-sm opacity-80 text-center">Instrsumentos de deuda gubernamental</p>
+                      </div>
+
+                      <div>
+                        <p class="mb-4">Un inversionista adquiere CETES a 182 días con una tasa de descuento del 8.5%. Considerando que invierte $50,000:</p>
+                        <ol class="list-decimal pl-5 space-y-2 mb-4">
+                          <li>Calcular el precio de compra del CETE</li>
+                          <li>Determinar la cantidad de títulos que puede adquirir</li>
+                          <li>Calcular el monto total invertido y el remanente</li>
+                          <li>Determinar el interés neto al vencimiento</li>
+                          <li>Calcular el ISR (5%) y el monto neto final</li>
+                          <li>Determinar el rendimiento anualizado y el rendimiento real considerando una inflación del 4.5%</li>
+                        </ol>
+                      </div>
+                    </div>
+
+                    <div class="glass-card p-4 bg-[#4effb6]/10 border border-[#4effb6]/30">
+                      <h4 class="font-bold mb-2 text-[#15f5c0]">Solución</h4>
+
+                      <div class="text-sm space-y-2">
+                        <div>
+                          <p><strong>1. Precio de compra:</strong><br>
+                          P = 10 / (1 + (0.085 * 182/360)) = $9.5865</p>
+
+                          <p class="mt-2"><strong>2. Cantidad de títulos:</strong><br>
+                          50,000 / 9.5865 = 5,215.68 → 5,215 títulos</p>
+
+                          <p class="mt-2"><strong>3. Monto invertido:</strong><br>
+                          5,215 * 9.5865 = $49,999.60<br>
+                          Remanente: $0.40</p>
+                        </div>
+
+                        <div>
+                          <p><strong>4. Interés neto:</strong><br>
+                          (5,215 * 10) - 49,999.60 = $5,150.40</p>
+
+                          <p class="mt-2"><strong>5. ISR y monto neto:</strong><br>
+                          ISR: 5,150.40 * 0.05 = $257.52<br>
+                          Neto: 5,150.40 - 257.52 = $4,892.88</p>
+
+                          <p class="mt-2"><strong>6. Rendimientos:</strong><br>
+                          Anualizado: ((52,150 / 49,999.60)^(365/182) - 1) * 100 = 8.5%<br>
+                          Real: (1.085 / 1.045 - 1) * 100 = 3.83%</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
             
+
+            <!-- Fin de Tareas -->
+            </div>
+
+<!--INICIO DE DIAPOSITIVAS------------------------------------------------------------------------------------------l  -->
+
+
             <!-- Diapositivas Tab -->
             <div id="diapositivas" class="tab-content hidden">
-                <div class="glass-card p-8 mb-8">
-                    <h2 class="text-3xl font-bold mb-6 text-[#4effb6]">Diapositivas Educativas</h2>
-                    
-                    <div class="mb-6">
-                        <label for="selectDiapositiva" class="block mb-2 font-medium">Selecciona una diapositiva:</label>
-                        <select id="selectDiapositiva" class="w-full md:w-1/3">
-                            <option value="diapositiva1">Diapositiva 1: CETES</option>
-                            <option value="diapositiva2">Diapositiva 2: Interés Simple</option>
-                            <option value="diapositiva3">Diapositiva 3: Interés Compuesto</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Diapositiva 1 -->
-                    <div id="diapositiva1" class="diapositiva-content">
-                        <div class="flex flex-col md:flex-row gap-8">
-                            <div class="md:w-1/2">
-                                <div class="flip-card h-80 w-full">
-                                    <div class="flip-card-inner h-full w-full">
-                                        <div class="flip-card-front glass-card h-full w-full flex items-center justify-center rounded-lg overflow-hidden">
-                                            <img src="https://www.banxico.org.mx/multimedia/recursos/%7B5B5D5C3C-9B6B-4A9F-8F3E-7E5A5D5C3C9D%7D.PNG" alt="CETES" class="w-full h-full object-cover">
-                                        </div>
-                                        <div class="flip-card-back glass-card h-full w-full p-6 flex items-center justify-center rounded-lg">
-                                            <div>
-                                                <h3 class="text-xl font-bold mb-4 text-center text-[#15f5c0]">¿Qué son los CETES?</h3>
-                                                <p class="text-sm text-center">Los Certificados de la Tesorería de la Federación (CETES) son instrumentos de deuda gubernamental emitidos por el gobierno mexicano. Son considerados una de las inversiones más seguras ya que están respaldados por el gobierno federal.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="md:w-1/2">
-                                <div class="glass-card p-6 h-full">
-                                    <h3 class="text-xl font-bold mb-4 text-[#15f5c0]">Información sobre CETES</h3>
-                                    <div class="mb-6">
-                                        <h4 class="font-bold mb-2">Características principales:</h4>
-                                        <ul class="list-disc pl-5 space-y-1 text-sm">
-                                            <li>Valor nominal: $10 MXN</li>
-                                            <li>Plazos: 28, 91, 182 y 365 días</li>
-                                            <li>Se colocan a descuento (precio menor al valor nominal)</li>
-                                            <li>Rendimiento libre de riesgo crediticio</li>
-                                            <li>Liquidación: T+1 día hábil</li>
-                                            <li>ISR: 5% sobre intereses</li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div class="glass-card p-4 bg-[#4effb6]/10 border border-[#4effb6]/30">
-                                        <h4 class="font-bold mb-2 text-[#15f5c0]">Conceptos clave:</h4>
-                                        <div class="text-sm space-y-2">
-                                            <p><span class="font-bold">Tasa de descuento:</span> Tasa a la que se descuenta el valor nominal para obtener el precio de compra.</p>
-                                            <p><span class="font-bold">Rendimiento:</span> Diferencia entre el valor nominal y el precio de compra.</p>
-                                            <p><span class="font-bold">Liquidez:</span> Posibilidad de vender antes del vencimiento en el mercado secundario.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Diapositiva 2 -->
-                    <div id="diapositiva2" class="diapositiva-content hidden">
-                        <div class="flex flex-col md:flex-row gap-8">
-                            <div class="md:w-1/2">
-                                <div class="flip-card h-80 w-full">
-                                    <div class="flip-card-inner h-full w-full">
-                                        <div class="flip-card-front glass-card h-full w-full flex items-center justify-center rounded-lg overflow-hidden">
-                                            <img src="https://www.economiasimple.net/wp-content/uploads/2023/03/interes-simple.jpg" alt="Interés Simple" class="w-full h-full object-cover">
-                                        </div>
-                                        <div class="flip-card-back glass-card h-full w-full p-6 flex items-center justify-center rounded-lg">
-                                            <div>
-                                                <h3 class="text-xl font-bold mb-4 text-center text-[#15f5c0]">Interés Simple</h3>
-                                                <p class="text-sm text-center">El interés simple es aquel que se calcula siempre sobre el capital inicial, sin tener en cuenta los intereses acumulados de periodos anteriores. Es decir, no hay capitalización de intereses.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="md:w-1/2">
-                                <div class="glass-card p-6 h-full">
-                                    <h3 class="text-xl font-bold mb-4 text-[#15f5c0]">Información sobre Interés Simple</h3>
-                                    <div class="mb-6">
-                                        <h4 class="font-bold mb-2">Características principales:</h4>
-                                        <ul class="list-disc pl-5 space-y-1 text-sm">
-                                            <li>El interés es constante en cada periodo</li>
-                                            <li>No hay efecto de capitalización</li>
-                                            <li>Fácil de calcular</li>
-                                            <li>Utilizado en préstamos a corto plazo</li>
-                                            <li>Menor rendimiento que el interés compuesto</li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div class="glass-card p-4 bg-[#4effb6]/10 border border-[#4effb6]/30">
-                                        <h4 class="font-bold mb-2 text-[#15f5c0]">Conceptos clave:</h4>
-                                        <div class="text-sm space-y-2">
-                                            <p><span class="font-bold">Capital inicial (C):</span> Cantidad de dinero invertida o prestada inicialmente.</p>
-                                            <p><span class="font-bold">Tasa de interés (i):</span> Porcentaje que se aplica al capital para calcular el interés.</p>
-                                            <p><span class="font-bold">Tiempo (t):</span> Periodo durante el cual se calcula el interés.</p>
-                                            <p><span class="font-bold">Fórmula:</span> I = C * i * t</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Diapositiva 3 -->
-                    <div id="diapositiva3" class="diapositiva-content hidden">
-                        <div class="flex flex-col md:flex-row gap-8">
-                            <div class="md:w-1/2">
-                                <div class="flip-card h-80 w-full">
-                                    <div class="flip-card-inner h-full w-full">
-                                        <div class="flip-card-front glass-card h-full w-full flex items-center justify-center rounded-lg overflow-hidden">
-                                            <img src="https://www.economiasimple.net/wp-content/uploads/2023/03/interes-compuesto.jpg" alt="Interés Compuesto" class="w-full h-full object-cover">
-                                        </div>
-                                        <div class="flip-card-back glass-card h-full w-full p-6 flex items-center justify-center rounded-lg">
-                                            <div>
-                                                <h3 class="text-xl font-bold mb-4 text-center text-[#15f5c0]">Interés Compuesto</h3>
-                                                <p class="text-sm text-center">El interés compuesto es aquel que se calcula sobre el capital inicial más los intereses acumulados de periodos anteriores. Esto genera un crecimiento exponencial del capital, conocido como "el efecto bola de nieve".</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="md:w-1/2">
-                                <div class="glass-card p-6 h-full">
-                                    <h3 class="text-xl font-bold mb-4 text-[#15f5c0]">Información sobre Interés Compuesto</h3>
-                                    <div class="mb-6">
-                                        <h4 class="font-bold mb-2">Características principales:</h4>
-                                        <ul class="list-disc pl-5 space-y-1 text-sm">
-                                            <li>Los intereses generan nuevos intereses</li>
-                                            <li>Crecimiento exponencial del capital</li>
-                                            <li>Mayor rendimiento a largo plazo</li>
-                                            <li>Depende de la frecuencia de capitalización</li>
-                                            <li>Base de la mayoría de inversiones</li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div class="glass-card p-4 bg-[#4effb6]/10 border border-[#4effb6]/30">
-                                        <h4 class="font-bold mb-2 text-[#15f5c0]">Conceptos clave:</h4>
-                                        <div class="text-sm space-y-2">
-                                            <p><span class="font-bold">Capitalización:</span> Proceso de agregar intereses al capital.</p>
-                                            <p><span class="font-bold">Frecuencia de capitalización (n):</span> Veces que se capitaliza por año.</p>
-                                            <p><span class="font-bold">Tasa efectiva:</span> Tasa real considerando la capitalización.</p>
-                                            <p><span class="font-bold">Fórmula:</span> M = C * (1 + i/n)^(n*t)</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <h2 class="text-2xl font-bold mb-6 gradient-text">Diapositivas de Ejemplo</h2>
+
+                <div class="mb-6">
+                    <label class="block mb-2">Seleccionar diapositiva:</label>
+                    <select id="selectDiapositiva" onchange="cambiarDiapositiva()" class="w-full p-2 rounded bg-gray-600 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+                        <option value="all" selected>Mostrar Todas</option>
+                        <option value="1">CETES: Instrumentos de Deuda</option>
+                        <option value="2">Interés Simple</option>
+                        <option value="3">Interés Compuesto</option>
+                    </select>
                 </div>
+
+
+                <!-- Diapositiva 1 -->
+                <div id="diapositiva1" class="diapositiva-content">
+                  <!-- Flip Card: se usa la clase h-64 para forzar la altura fija, similar al ejemplo -->
+                  <div class="flip-card w-full h-64 mb-6 cursor-pointer" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner w-full h-full">
+                      <!-- Cara frontal: Imagen -->
+                      <div class="flip-card-front glass-card bg-gray-800 rounded-lg flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                            alt="Interés Simple" 
+                            class="w-full h-full object-cover rounded-lg">
+                      </div>
+                      <!-- Cara trasera: Texto -->
+                      <div class="flip-card-back glass-card p-4 rounded-lg flex items-center justify-center p-4">
+                        <div>
+                          <h3 class="font-bold neon-text mb-2 text-center text-[#4effb6]">Interés Compuesto</h3>
+                          <p class="text-sm text-center">
+                            "El interés compuesto es la octava maravilla del mundo. Quien lo entiende, lo gana; quien no, lo paga." - Albert Einstein
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Contenido adicional que no debe traslaparse -->
+                  <div class="glass-card p-4 rounded-lg">
+                    <h4 class="font-bold mb-3 text-[#4effb6]">💸 El Poder del Interés Compuesto</h4>
+                    <p class="mb-4">
+                      El interés compuesto es el concepto de que el interés ganado sobre una inversión se reinvierte para generar más interés, creando un efecto de crecimiento exponencial con el tiempo.
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <h5 class="font-bold mb-2">Características principales</h5>
+                        <ul class="list-disc pl-5 space-y-1">
+                          <li>A = P × (1 + r/n)<sup>nt</sup></li>
+                          <li>Valor nominal de $10 por título</li>
+                          <li>Liquidación diaria (pueden venderse antes del vencimiento)</li>
+                          <li>Exentos de comisiones en la mayoría de los casos</li>
+                          <li>Sujetos a ISR sobre los intereses generados</li>
+                        </ul>
+                      </div>
+                      <div class="key-concept p-3">
+                        <h5 class="font-bold mb-2">Conceptos clave</h5>
+                        <p><strong>Tasa de descuento:</strong> Diferencia porcentual entre valor nominal y precio de compra.</p>
+                        <p class="mt-2"><strong>Rendimiento anualizado:</strong> Tasa equivalente a un año, útil para comparar con otros instrumentos.</p>
+                        <p class="mt-2"><strong>Precio limpio vs precio sucio:</strong> El precio limpio es el teórico, el sucio incluye intereses acumulados.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+
+
+            
+            <!-- Fin de Diapositivas -->
             </div>
-        </main>
-    </div>
-    
+        <!-- Fin de Tabs (Desde Introducción) -->
+        </div>
+
+
+
+
+        <!-- Derechos-->
+        <footer class="mt-12 text-center text-sm" style="color: var(--text);">
+          <p>© 2025 CuadernoDigital | Matrix Neon Edition</p>
+          <p class="mt-2">Conectando el mundo financiero con tecnología futurista</p>
+          <div class="flex justify-center space-x-4 mt-4">
+            <a href="#" class="footer-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="footer-link"><i class="fab fa-linkedin"></i></a>
+            <a href="#" class="footer-link"><i class="fab fa-github"></i></a>
+          </div>
+        </footer>
+
+
+<!-- Fin de Card Principal  -->
+<!-- Fin de Card Principal  -->
+<!-- Fin de Card Principal  -->
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<!--INICIO DEL SCRIPT DE JAVA-------------------------------------------------------------------------------------------l  -->
+<!--INICIO DEL SCRIPT DE JAVA-------------------------------------------------------------------------------------------l  -->
+<!--INICIO DEL SCRIPT DE JAVA-------------------------------------------------------------------------------------------l  -->
+<!--INICIO DEL SCRIPT DE JAVA-------------------------------------------------------------------------------------------l  -->
     <script>
-        // Matrix Background Effect
+// Fondo Matrix --------------------------------------------------------------------------
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
-        
+
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        
+
         const katakana = '01';
-        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        const nums = '0123456789';
-        
+        const latin = '01';
+        const nums = '01';
+
         const alphabet = katakana + latin + nums;
-        
+
         const fontSize = 16;
         const columns = canvas.width / fontSize;
-        
+
         const rainDrops = [];
-        
+
         for (let x = 0; x < columns; x++) {
             rainDrops[x] = 1;
         }
-        
+
         const draw = () => {
             ctx.fillStyle = 'rgba(18, 18, 18, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
+
             ctx.fillStyle = '#4effb6';
             ctx.font = fontSize + 'px monospace';
-            
+
             for (let i = 0; i < rainDrops.length; i++) {
                 const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
                 ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-                
+
                 if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
                     rainDrops[i] = 0;
                 }
                 rainDrops[i]++;
             }
         };
-        
+
         setInterval(draw, 30);
-        
-        // Handle window resize
+
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         });
-        
-        // Tab functionality
-        const tabs = document.querySelectorAll('.tab-button');
-        const tabContents = document.querySelectorAll('.tab-content');
-        
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const tabId = tab.getAttribute('data-tab');
-                
-                // Update active tab
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                
-                // Show corresponding content
-                tabContents.forEach(content => {
-                    content.classList.add('hidden');
-                    if (content.id === tabId) {
-                        content.classList.remove('hidden');
+
+// Navegación por la pestaña de opciones --------------------------------------------------------------------------
+        function openTab(tabName) {
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.add('hidden');
+            }
+
+            const tabButtons = document.getElementsByClassName('tab-button');
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove('active');
+            }
+
+            document.getElementById(tabName).classList.remove('hidden');
+            event.currentTarget.classList.add('active');
+        }
+
+
+        // Toggle Venta Anticipada Fields
+        document.getElementById('ventaAnticipada').addEventListener('change', function() {
+            const fields = document.getElementById('ventaAnticipadaFields');
+            if (this.checked) {
+                fields.classList.remove('hidden');
+            } else {
+                fields.classList.add('hidden');
+            }
+        });
+
+// APP DE CETES CALCULADORA --------------------------------------------------------------------------
+
+        function calcularCetes() {
+            const plazo = parseInt(document.getElementById('cetePlazo').value);
+            const tasa = parseFloat(document.getElementById('ceteTasa').value) / 100;
+            const inversion = parseFloat(document.getElementById('ceteInversion').value);
+            const ventaAnticipada = document.getElementById('ventaAnticipada').checked;
+            const inflacion = parseFloat(document.getElementById('inflacionInput').value) ;
+
+            // Precio de compra
+            const precioCompra = 10 / (1 + (tasa * plazo / 360));
+            const cantidadComprada = Math.floor(inversion / precioCompra);
+            const montoInvertido = cantidadComprada * precioCompra;
+            const remanente = inversion - montoInvertido;
+
+            let interesNeto, isr, montoNeto, rendAnualizado, rendNetoAnualizado, rendReal;
+
+            if (!ventaAnticipada) {
+                // Cálculo normal al vencimiento
+                interesNeto = (cantidadComprada * 10) - montoInvertido;
+                isr = interesNeto * 0.05;
+                montoNeto = (cantidadComprada * 10) - isr;
+
+                rendAnualizado = tasa * 100;
+                rendNetoAnualizado = rendAnualizado - rendAnualizado*0.05;
+
+                // Inflación
+                rendReal = rendNetoAnualizado - inflacion
+
+                // Mostrar resultados
+                document.getElementById('precioCompra').textContent = `$${precioCompra.toFixed(4)}`;
+                document.getElementById('cantidadComprada').textContent = cantidadComprada;
+                document.getElementById('montoInvertido').textContent = `$${montoInvertido.toFixed(2)}`;
+                document.getElementById('remanente').textContent = `$${remanente.toFixed(2)}`;
+                document.getElementById('interesNeto').textContent = `$${interesNeto.toFixed(2)}`;
+                document.getElementById('isr').textContent = `$${isr.toFixed(2)}`;
+                document.getElementById('montoNeto').textContent = `$${montoNeto.toFixed(2)}`;
+                document.getElementById('rendAnualizado').textContent = `${rendAnualizado.toFixed(2)}%`;
+                document.getElementById('rendNetoAnualizado').textContent = `${rendNetoAnualizado.toFixed(2)}%`;
+                document.getElementById('rendReal').textContent = `${rendReal.toFixed(2)}%`;
+                document.getElementById('inflacion').textContent = `${inflacion}%`;
+            } else {
+                // Cálculo para venta anticipada
+                const plazoTranscurrido = parseInt(document.getElementById('plazoTranscurrido').value);
+                const tasaActual = parseFloat(document.getElementById('tasaActual').value) / 100;
+
+
+                //MODIFICAR AJUSTAR A VENTA ANTICIPADA
+                // Precio de venta anticipada
+                const plazoRestante = plazo - plazoTranscurrido;
+                const precioVenta = 10 / (1 + (tasaActual * plazoRestante / 360));
+
+                // Rendimiento del período
+                const rendimientoPeriodo = (precioVenta - precioCompra) / precioCompra;
+                interesNeto = cantidadComprada * (precioVenta - precioCompra);
+                isr = interesNeto * 0.05;
+                montoNeto = (cantidadComprada * precioVenta) - isr;
+
+                // Rendimientos anualizados
+                rendAnualizado = (Math.pow(1 + rendimientoPeriodo, 365/plazoTranscurrido) - 1) * 100;
+                rendNetoAnualizado = (Math.pow(1 + (rendimientoPeriodo * 0.95), 365/plazoTranscurrido) - 1) * 100;
+
+                // Inflación
+                rendReal = ((1 + (rendimientoPeriodo * 0.95)) / (1 + inflacion/100) - 1) * 100;
+
+                // Mostrar resultados
+                document.getElementById('precioCompra').textContent = `$${precioCompra.toFixed(4)}`;
+                document.getElementById('cantidadComprada').textContent = cantidadComprada;
+                document.getElementById('montoInvertido').textContent = `$${montoInvertido.toFixed(2)}`;
+                document.getElementById('remanente').textContent = `$${remanente.toFixed(2)}`;
+                document.getElementById('interesNeto').textContent = `$${interesNeto.toFixed(2)}`;
+                document.getElementById('isr').textContent = `$${isr.toFixed(2)}`;
+                document.getElementById('montoNeto').textContent = `$${montoNeto.toFixed(2)}`;
+                document.getElementById('rendAnualizado').textContent = `${rendAnualizado.toFixed(2)}%`;
+                document.getElementById('rendNetoAnualizado').textContent = `${rendNetoAnualizado.toFixed(2)}%`;
+                document.getElementById('rendReal').textContent = `${rendReal.toFixed(2)}%`;
+                document.getElementById('inflacion').textContent = `${inflacionInput}%`;
+            }
+
+            document.getElementById('cetesResults').classList.remove('hidden');
+        }
+
+
+
+
+
+// APP DE CALCULADORA INTERES  --------------------------------------------------------------------------
+
+        function calcularInteres() {
+            const tipo = document.getElementById('tipoInteres').value;
+            const capital = parseFloat(document.getElementById('capital').value);
+            const tasa = parseFloat(document.getElementById('tasaInteres').value) / 100;
+            const plazo = parseFloat(document.getElementById('plazoInteres').value);
+            const periodos = parseInt(document.getElementById('periodoCapitalizacion').value);
+
+            let capitalFinal, interesesGenerados, tasaEfectiva, desglose = [];
+
+            if (tipo === 'simple') {
+                // Interés simple
+                interesesGenerados = capital * tasa * plazo;
+                capitalFinal = capital + interesesGenerados;
+                tasaEfectiva = tasa * 100;
+
+                // Desglose anual
+                for (let i = 1; i <= plazo; i++) {
+                    const interesAnual = capital * tasa;
+                    desglose.push({
+                        año: i,
+                        capital: capital.toFixed(2),
+                        interes: interesAnual.toFixed(2),
+                        total: (capital + (interesAnual * i)).toFixed(2)
+                    });
+                }
+            } else {
+                // Interés compuesto
+                const tasaPeriodica = tasa / periodos;
+                const totalPeriodos = plazo * periodos;
+
+                capitalFinal = capital * Math.pow(1 + tasaPeriodica, totalPeriodos);
+                interesesGenerados = capitalFinal - capital;
+                tasaEfectiva = (Math.pow(1 + tasaPeriodica, periodos) - 1) * 100;
+
+                // Desglose por período
+                let capitalAcumulado = capital;
+                for (let i = 1; i <= totalPeriodos; i++) {
+                    const interesPeriodo = capitalAcumulado * tasaPeriodica;
+                    capitalAcumulado += interesPeriodo;
+
+                    if (i % periodos === 0 || i === totalPeriodos) {
+                        desglose.push({
+                            año: (i / periodos).toFixed(1),
+                            capital: capital.toFixed(2),
+                            interes: (capitalAcumulado - capital).toFixed(2),
+                            total: capitalAcumulado.toFixed(2)
+                        });
                     }
-                });
-            });
-        });
-        
-        // Tareas select functionality
-        const selectTarea = document.getElementById('selectTarea');
-        const tareaContents = document.querySelectorAll('.tarea-content');
-        
-        selectTarea.addEventListener('change', () => {
-            const selectedTarea = selectTarea.value;
-            
-            tareaContents.forEach(content => {
-                content.classList.add('hidden');
-                if (content.id === selectedTarea) {
-                    content.classList.remove('hidden');
                 }
-            });
-        });
-        
-        // Diapositivas select functionality
-        const selectDiapositiva = document.getElementById('selectDiapositiva');
-        const diapositivaContents = document.querySelectorAll('.diapositiva-content');
-        
-        selectDiapositiva.addEventListener('change', () => {
-            const selectedDiapositiva = selectDiapositiva.value;
-            
-            diapositivaContents.forEach(content => {
-                content.classList.add('hidden');
-                if (content.id === selectedDiapositiva) {
-                    content.classList.remove('hidden');
-                }
-            });
-        });
-        
-        // CETES Calculator
-        const ventaAnticipadaCheckbox = document.getElementById('ventaAnticipada');
-        const ventaAnticipadaFields = document.getElementById('ventaAnticipadaFields');
-        const calcularCetesBtn = document.getElementById('calcularCetes');
-        const resultadosCetes = document.getElementById('resultadosCetes');
-        
-        ventaAnticipadaCheckbox.addEventListener('change', () => {
-            if (ventaAnticipadaCheckbox.checked) {
-                ventaAnticipadaFields.classList.remove('hidden');
-            } else {
-                ventaAnticipadaFields.classList.add('hidden');
             }
-        });
-        
-        calcularCetesBtn.addEventListener('click', () => {
-            // Get input values
-            const montoInversion = parseFloat(document.getElementById('montoInversion').value) || 0;
-            const cantidadCetes = parseInt(document.getElementById('cantidadCetes').value) || 0;
-            const plazoInversion = parseInt(document.getElementById('plazoInversion').value);
-            const tasaDescuento = parseFloat(document.getElementById('tasaDescuento').value);
-            const inflacion = parseFloat(document.getElementById('inflacion').value) || 0;
-            const ventaAnticipada = ventaAnticipadaCheckbox.checked;
-            
-            let plazoVenta, tasaActual;
-            
-            if (ventaAnticipada) {
-                plazoVenta = parseInt(document.getElementById('plazoVenta').value);
-                tasaActual = parseFloat(document.getElementById('tasaActual').value);
-            }
-            
-            // Calculate CETE price
-            const precioCompra = 10 / (1 + (tasaDescuento * plazoInversion / 36000));
-            
-            // Calculate investment details
-            let montoInvertido, remanente, interesNeto, isr, montoNeto;
-            
-            if (cantidadCetes > 0) {
-                montoInvertido = cantidadCetes * precioCompra;
-                remanente = montoInversion - montoInvertido;
-            } else {
-                cantidadCetes = Math.floor(montoInversion / precioCompra);
-                montoInvertido = cantidadCetes * precioCompra;
-                remanente = montoInversion - montoInvertido;
-            }
-            
-            if (ventaAnticipada) {
-                // Calculate early sale
-                const precioVenta = 10 / (1 + (tasaActual * (plazoInversion - plazoVenta) / 36000));
-                interesNeto = (cantidadCetes * precioVenta) - montoInvertido;
-            } else {
-                // Normal maturity
-                interesNeto = (cantidadCetes * 10) - montoInvertido;
-            }
-            
-            isr = interesNeto * 0.05;
-            montoNeto = montoInvertido + (interesNeto - isr);
-            
-            // Calculate yields
-            const rendAnualizado = ((10 - precioCompra) / precioCompra) * (360 / plazoInversion) * 100;
-            const rendNetoAnual = rendAnualizado * 0.95; // After ISR
-            const rendReal = rendNetoAnual - inflacion;
-            
-            // Display results
-            document.getElementById('precioCompra').textContent = `$${precioCompra.toFixed(3)}`;
-            document.getElementById('montoInvertido').textContent = `$${montoInvertido.toFixed(2)}`;
-            document.getElementById('remanente').textContent = `$${remanente.toFixed(2)}`;
-            document.getElementById('interesNeto').textContent = `$${interesNeto.toFixed(2)}`;
-            document.getElementById('isr').textContent = `$${isr.toFixed(2)}`;
-            document.getElementById('montoNeto').textContent = `$${montoNeto.toFixed(2)}`;
-            document.getElementById('rendAnualizado').textContent = `${rendAnualizado.toFixed(2)}%`;
-            document.getElementById('rendNetoAnual').textContent = `${rendNetoAnual.toFixed(2)}%`;
-            document.getElementById('rendReal').textContent = `${rendReal.toFixed(2)}%`;
-            
-            // Show results
-            resultadosCetes.classList.remove('hidden');
-        });
-        
-        // Interest Calculator
-        const btnSimple = document.getElementById('btnSimple');
-        const btnCompuesto = document.getElementById('btnCompuesto');
-        const frecuenciaContainer = document.getElementById('frecuenciaContainer');
-        const calcularInteresBtn = document.getElementById('calcularInteres');
-        const resultadosInteres = document.getElementById('resultadosInteres');
-        const tablaInteresContainer = document.getElementById('tablaInteresContainer');
-        const tablaInteres = document.getElementById('tablaInteres');
-        
-        btnSimple.addEventListener('click', () => {
-            btnSimple.classList.add('active');
-            btnCompuesto.classList.remove('active');
-            frecuenciaContainer.classList.add('hidden');
-        });
-        
-        btnCompuesto.addEventListener('click', () => {
-            btnCompuesto.classList.add('active');
-            btnSimple.classList.remove('active');
-            frecuenciaContainer.classList.remove('hidden');
-        });
-        
-        calcularInteresBtn.addEventListener('click', () => {
-            // Get input values
-            const capital = parseFloat(document.getElementById('capital').value) || 0;
-            const tasaInteres = parseFloat(document.getElementById('tasaInteres').value) || 0;
-            const plazoInteres = parseFloat(document.getElementById('plazoInteres').value) || 0;
-            const tipoInteres = btnSimple.classList.contains('active') ? 'simple' : 'compuesto';
-            
-            let frecuencia = 1;
-            if (tipoInteres === 'compuesto') {
-                frecuencia = parseInt(document.getElementById('frecuencia').value);
-            }
-            
-            // Calculate results
-            let interesGenerado, montoFinal, rendimientoTotal;
-            
-            if (tipoInteres === 'simple') {
-                interesGenerado = capital * (tasaInteres / 100) * plazoInteres;
-                montoFinal = capital + interesGenerado;
-                rendimientoTotal = (interesGenerado / capital) * 100;
-                
-                // Clear table for simple interest
-                tablaInteresContainer.classList.add('hidden');
-            } else {
-                // Compound interest
-                const periodos = plazoInteres * frecuencia;
-                const tasaPeriodo = tasaInteres / frecuencia;
-                
-                montoFinal = capital * Math.pow(1 + (tasaPeriodo / 100), periodos);
-                interesGenerado = montoFinal - capital;
-                rendimientoTotal = (interesGenerado / capital) * 100;
-                
-                // Generate table for compound interest
-                generarTablaInteres(capital, tasaPeriodo / 100, periodos);
-                tablaInteresContainer.classList.remove('hidden');
-            }
-            
-            // Display results
-            document.getElementById('interesGenerado').textContent = `$${interesGenerado.toFixed(2)}`;
-            document.getElementById('montoFinal').textContent = `$${montoFinal.toFixed(2)}`;
-            document.getElementById('rendimientoTotal').textContent = `${rendimientoTotal.toFixed(2)}%`;
-            
-            // Show results
-            resultadosInteres.classList.remove('hidden');
-        });
-        
-        function generarTablaInteres(capital, tasaPeriodo, periodos) {
-            tablaInteres.innerHTML = '';
-            
-            let capitalActual = capital;
-            
-            for (let i = 1; i <= periodos; i++) {
-                const interesPeriodo = capitalActual * tasaPeriodo;
-                const totalPeriodo = capitalActual + interesPeriodo;
-                
+
+            // Inflación para rendimiento real
+            const inflacionInput = parseFloat(prompt("Ingrese la tasa de inflación esperada (%):", "4")) || 4;
+            const inflacion = inflacionInput / 100;
+            const rendReal = ((1 + (tasaEfectiva/100)) / (1 + inflacion) - 1) * 100;
+
+            // Mostrar resultados
+            document.getElementById('capitalFinal').textContent = `$${capitalFinal.toFixed(2)}`;
+            document.getElementById('interesesGenerados').textContent = `$${interesesGenerados.toFixed(2)}`;
+            document.getElementById('tasaEfectiva').textContent = `${tasaEfectiva.toFixed(2)}%`;
+            document.getElementById('rendRealInteres').textContent = `${rendReal.toFixed(2)}%`;
+
+            // Generar tabla de desglose
+            const tableBody = document.getElementById('desgloseInteres');
+            tableBody.innerHTML = '';
+
+            desglose.forEach(item => {
                 const row = document.createElement('tr');
+                row.className = 'border-b border-[rgba(255,255,255,0.1)]';
                 row.innerHTML = `
-                    <td class="py-2">${i}</td>
-                    <td class="text-right py-2">$${capitalActual.toFixed(2)}</td>
-                    <td class="text-right py-2">$${interesPeriodo.toFixed(2)}</td>
-                    <td class="text-right py-2">$${totalPeriodo.toFixed(2)}</td>
+                    <td class="py-2">${item.año}</td>
+                    <td class="text-right py-2">$${item.capital}</td>
+                    <td class="text-right py-2">$${item.interes}</td>
+                    <td class="text-right py-2">$${item.total}</td>
                 `;
-                
-                tablaInteres.appendChild(row);
-                capitalActual = totalPeriodo;
+                tableBody.appendChild(row);
+            });
+
+            document.getElementById('interesResults').classList.remove('hidden');
+        }
+
+
+
+
+// Navegación por la pestaña de TAREAS--------------------------------------------------------------------------
+
+        function cambiarTarea() {
+            const tareaSeleccionada = document.getElementById('selectTarea').value;
+            const tareas = document.getElementsByClassName('tarea-content');
+
+            // Oculta todas las tareas
+            for (let i = 0; i < tareas.length; i++) {
+                tareas[i].classList.add('hidden');
+            }
+
+            // Si se selecciona "all", mostrar todas las tareas
+            if (tareaSeleccionada === "all") {
+                for (let i = 0; i < tareas.length; i++) {
+                    tareas[i].classList.remove('hidden');
+                }
+            } else {
+                const tarea = document.getElementById(`tarea${tareaSeleccionada}`);
+                if (tarea) {
+                    tarea.classList.remove('hidden');
+                }
             }
         }
+
+// Navegación por la pestaña de DIAPOSITIVAS -------------------------------------------------------------------------
+
+        function cambiarDiapositiva() {
+            const diapositivaSeleccionada = document.getElementById('selectDiapositiva').value;
+
+            const diapositivas = document.getElementsByClassName('diapositiva-content');
+
+            // Oculta todas las diapositivas
+            for (let i = 0; i < diapositivas.length; i++) {
+                diapositivas[i].classList.add('hidden');
+            }
+
+            // Si se selecciona "all", mostrar todas
+            if (diapositivaSeleccionada === "all") {
+                for (let i = 0; i < diapositivas.length; i++) {
+                    diapositivas[i].classList.remove('hidden');
+                }
+            } else {
+                const diapositiva = document.getElementById(`diapositiva${diapositivaSeleccionada}`);
+                if (diapositiva) {
+                    diapositiva.classList.remove('hidden');
+                }
+            }
+        }
+
+// FUNCION PARA GIRAR TARJETA DE DIAPOSITVIA--------------------------------------------------------------------------
+        function flipCard(element) {
+            element.classList.toggle('flipped');
+        }
+
+
+    // Fin del SCRIPT
     </script>
 </body>
 </html>
