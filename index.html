@@ -399,6 +399,9 @@
                             </button>
                         </div>
 
+
+
+
                         <div id="cetesResults" class="hidden glass-card p-5 rounded-lg">
                             <h4 class="font-bold text-lg mb-4 text-[#4effb6]">Resultados</h4>
 
@@ -455,7 +458,56 @@
                                     <p id="inflacion" class="font-bold">0.00%</p>
                                 </div>
                             </div>
+
+                            <!-- Sección Venta Anticipada (oculta por defecto) -->
+                            <div id="ventaAnticipadaSection" class="hidden">
+                                <h4 id="tituloVentaAnticipada" class="font-bold text-lg mb-4 text-[#4effb6]">Resultados Venta Anticipada</h4>
+                                
+                                <div class="result-box p-3 mb-4">
+                                    <div class="flex justify-between mb-1">
+                                        <span>Interés neto:</span>
+                                        <span id="interesNetoAnticipado" class="font-bold">$0.00</span>
+                                    </div>
+                                    <div class="flex justify-between mb-1">
+                                        <span>ISR (5%):</span>
+                                        <span id="isrAnticipado" class="font-bold">$0.00</span>
+                                    </div>
+                                    <div class="flex justify-between font-bold text-[#4effb6]">
+                                        <span>Monto neto final:</span>
+                                        <span id="montoNetoAnticipado" class="font-bold">$0.00</span>
+                                    </div>
+                                </div>
+
+                                <h5 class="font-bold mb-2 text-[#4effb6]">Rendimientos</h5>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-sm opacity-80">Tasa de descuento actual</p>
+                                        <p id="tasaDescuentoActual" class="font-bold">0.00%</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm opacity-80">Precio de venta anticipada</p>
+                                        <p id="precioVentaAnticipada" class="font-bold">$0.00</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm opacity-80">Rendimiento del Periodo</p>
+                                        <p id="rendimientoPeriodo" class="font-bold">0.00%</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm opacity-80">Rendimiento neto</p>
+                                        <p id="rendNetoPeriodo" class="font-bold">0.00%</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm opacity-80">Rendimiento real</p>
+                                        <p id="rendRealPeriodo" class="font-bold">0.00%</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm opacity-80">Inflación considerada</p>
+                                        <p id="inflacionAnticipada" class="font-bold">0.00%</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                    <!-- FIN DEL CETES RESULT IMPRESION -->
                     </div>
                 </div>
 
@@ -892,76 +944,67 @@
             const tasa = parseFloat(document.getElementById('ceteTasa').value) / 100;
             const inversion = parseFloat(document.getElementById('ceteInversion').value);
             const ventaAnticipada = document.getElementById('ventaAnticipada').checked;
-            const inflacion = parseFloat(document.getElementById('inflacionInput').value) ;
+            const inflacion = parseFloat(document.getElementById('inflacionInput').value);
 
             // Precio de compra
-            const precioCompra = 10 / (1 + (tasa * plazo / 360));
+            const precioCompra = 10 * (1 - (tasa * plazo / 360));
             const cantidadComprada = Math.floor(inversion / precioCompra);
             const montoInvertido = cantidadComprada * precioCompra;
             const remanente = inversion - montoInvertido;
 
             let interesNeto, isr, montoNeto, rendAnualizado, rendNetoAnualizado, rendReal;
+            let interesNetoAnticipado, isrAnticipado, montoNetoAnticipado, rendNetoPeriodo, rendRealPeriodo;
+            
+            // Cálculo normal al vencimiento
+            interesNeto = cantidadComprada * (10 - precioCompra);
+            isr = interesNeto * 0.05;
+            montoNeto = inversion + interesNeto - isr;
+            rendAnualizado = tasa * 100;
+            rendNetoAnualizado = rendAnualizado - rendAnualizado*0.05;
+            rendReal = rendNetoAnualizado - inflacion;
 
-            if (!ventaAnticipada) {
-                // Cálculo normal al vencimiento
-                interesNeto = (cantidadComprada * 10) - montoInvertido;
-                isr = interesNeto * 0.05;
-                montoNeto = (cantidadComprada * 10) - isr;
+            // Cálculo venta anticipada   
+            const plazoTranscurrido = parseInt(document.getElementById('plazoTranscurrido').value);
+            const tasaActual = parseFloat(document.getElementById('tasaActual').value) / 100;
+            const plazoRestante = plazo - plazoTranscurrido;
+            const precioVenta = 10 * (1 - (tasaActual * plazoRestante / 360));
+            const rendimientoPeriodo = (((precioVenta - precioCompra)*360) / (precioCompra*plazoTranscurrido))*100;
 
-                rendAnualizado = tasa * 100;
-                rendNetoAnualizado = rendAnualizado - rendAnualizado*0.05;
+            interesNetoAnticipado = cantidadComprada * (precioVenta - precioCompra);
+            isrAnticipado = interesNetoAnticipado * 0.05;
+            montoNetoAnticipado = inversion + interesNetoAnticipado - isrAnticipado;
+            rendNetoPeriodo = rendimientoPeriodo - rendimientoPeriodo*0.05;
+            rendRealPeriodo = rendNetoPeriodo - inflacion*(plazoTranscurrido/365);
 
-                // Inflación
-                rendReal = rendNetoAnualizado - inflacion
+            // Mostrar siempre resultados normales
+            document.getElementById('precioCompra').textContent = `$${precioCompra.toFixed(4)}`;
+            document.getElementById('cantidadComprada').textContent = cantidadComprada;
+            document.getElementById('montoInvertido').textContent = `$${montoInvertido.toFixed(2)}`;
+            document.getElementById('remanente').textContent = `$${remanente.toFixed(2)}`;
+            document.getElementById('interesNeto').textContent = `$${interesNeto.toFixed(2)}`;
+            document.getElementById('isr').textContent = `$${isr.toFixed(2)}`;
+            document.getElementById('montoNeto').textContent = `$${montoNeto.toFixed(2)}`;
+            document.getElementById('rendAnualizado').textContent = `${rendAnualizado.toFixed(2)}%`;
+            document.getElementById('rendNetoAnualizado').textContent = `${rendNetoAnualizado.toFixed(2)}%`;
+            document.getElementById('rendReal').textContent = `${rendReal.toFixed(2)}%`;
+            document.getElementById('inflacion').textContent = `${inflacion}%`;
+            document.getElementById('inflacionAnticipada').textContent = `${inflacion}%`;
 
-                // Mostrar resultados
-                document.getElementById('precioCompra').textContent = `$${precioCompra.toFixed(4)}`;
-                document.getElementById('cantidadComprada').textContent = cantidadComprada;
-                document.getElementById('montoInvertido').textContent = `$${montoInvertido.toFixed(2)}`;
-                document.getElementById('remanente').textContent = `$${remanente.toFixed(2)}`;
-                document.getElementById('interesNeto').textContent = `$${interesNeto.toFixed(2)}`;
-                document.getElementById('isr').textContent = `$${isr.toFixed(2)}`;
-                document.getElementById('montoNeto').textContent = `$${montoNeto.toFixed(2)}`;
-                document.getElementById('rendAnualizado').textContent = `${rendAnualizado.toFixed(2)}%`;
-                document.getElementById('rendNetoAnualizado').textContent = `${rendNetoAnualizado.toFixed(2)}%`;
-                document.getElementById('rendReal').textContent = `${rendReal.toFixed(2)}%`;
-                document.getElementById('inflacion').textContent = `${inflacion}%`;
+            if (ventaAnticipada) {
+                // Mostrar resultados anticipados
+                document.getElementById('ventaAnticipadaSection').classList.remove('hidden');
+                document.getElementById('tituloVentaAnticipada').textContent = "Resultados de Venta Anticipada";
+                document.getElementById('tasaDescuentoActual').textContent = `${(tasaActual * 100).toFixed(2)}%`;
+                document.getElementById('precioVentaAnticipada').textContent = `$${precioVenta.toFixed(4)}`;
+                document.getElementById('interesNetoAnticipado').textContent = `$${interesNetoAnticipado.toFixed(2)}`;
+                document.getElementById('isrAnticipado').textContent = `$${isrAnticipado.toFixed(2)}`;
+                document.getElementById('montoNetoAnticipado').textContent = `$${montoNetoAnticipado.toFixed(2)}`;
+                document.getElementById('rendimientoPeriodo').textContent = `${rendimientoPeriodo.toFixed(2)}%`;
+                document.getElementById('rendNetoPeriodo').textContent = `${rendNetoPeriodo.toFixed(2)}%`;
+                document.getElementById('rendRealPeriodo').textContent = `${rendRealPeriodo.toFixed(2)}%`;
             } else {
-                // Cálculo para venta anticipada
-                const plazoTranscurrido = parseInt(document.getElementById('plazoTranscurrido').value);
-                const tasaActual = parseFloat(document.getElementById('tasaActual').value) / 100;
-
-
-                //MODIFICAR AJUSTAR A VENTA ANTICIPADA
-                // Precio de venta anticipada
-                const plazoRestante = plazo - plazoTranscurrido;
-                const precioVenta = 10 / (1 + (tasaActual * plazoRestante / 360));
-
-                // Rendimiento del período
-                const rendimientoPeriodo = (precioVenta - precioCompra) / precioCompra;
-                interesNeto = cantidadComprada * (precioVenta - precioCompra);
-                isr = interesNeto * 0.05;
-                montoNeto = (cantidadComprada * precioVenta) - isr;
-
-                // Rendimientos anualizados
-                rendAnualizado = (Math.pow(1 + rendimientoPeriodo, 365/plazoTranscurrido) - 1) * 100;
-                rendNetoAnualizado = (Math.pow(1 + (rendimientoPeriodo * 0.95), 365/plazoTranscurrido) - 1) * 100;
-
-                // Inflación
-                rendReal = ((1 + (rendimientoPeriodo * 0.95)) / (1 + inflacion/100) - 1) * 100;
-
-                // Mostrar resultados
-                document.getElementById('precioCompra').textContent = `$${precioCompra.toFixed(4)}`;
-                document.getElementById('cantidadComprada').textContent = cantidadComprada;
-                document.getElementById('montoInvertido').textContent = `$${montoInvertido.toFixed(2)}`;
-                document.getElementById('remanente').textContent = `$${remanente.toFixed(2)}`;
-                document.getElementById('interesNeto').textContent = `$${interesNeto.toFixed(2)}`;
-                document.getElementById('isr').textContent = `$${isr.toFixed(2)}`;
-                document.getElementById('montoNeto').textContent = `$${montoNeto.toFixed(2)}`;
-                document.getElementById('rendAnualizado').textContent = `${rendAnualizado.toFixed(2)}%`;
-                document.getElementById('rendNetoAnualizado').textContent = `${rendNetoAnualizado.toFixed(2)}%`;
-                document.getElementById('rendReal').textContent = `${rendReal.toFixed(2)}%`;
-                document.getElementById('inflacion').textContent = `${inflacionInput}%`;
+                // Ocultar sección anticipada
+                document.getElementById('ventaAnticipadaSection').classList.add('hidden');
             }
 
             document.getElementById('cetesResults').classList.remove('hidden');
